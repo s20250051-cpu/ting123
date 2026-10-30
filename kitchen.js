@@ -7,6 +7,9 @@
 (() => {
   "use strict";
 
+  const EN = window.GAME_LANG === "en";
+  const T = (zh, en) => (EN ? en : zh);
+
   const dom = {
     overlay: document.getElementById("kitchen-overlay"),
     shell: document.querySelector(".kitchen-shell"),
@@ -108,7 +111,7 @@
   }
 
   function updateHud() {
-    if (dom.dateChip) dom.dateChip.textContent = state.dateLabel || "生日蛋糕";
+    if (dom.dateChip) dom.dateChip.textContent = state.dateLabel || T("生日蛋糕", "Birthday cake");
     if (dom.recipeDate) dom.recipeDate.textContent = state.dateLabel || "—";
 
     dom.chips.forEach((chip) => {
@@ -129,10 +132,12 @@
     if (dom.bakeBtn) dom.bakeBtn.disabled = state.step !== 2 || state.baking || state.completing;
     if (dom.bakeNote) {
       if (state.baking) {
-        dom.bakeNote.textContent = "烘焙中 · 180°C";
+        dom.bakeNote.textContent = T("烘焙中 · 180°C", "Baking · 180°C");
         dom.bakeNote.classList.add("is-hot");
       } else {
-        dom.bakeNote.textContent = state.step >= 3 ? "烘焙完成 · 180°C" : "烤箱溫度 180°C";
+        dom.bakeNote.textContent = state.step >= 3
+          ? T("烘焙完成 · 180°C", "Baked · 180°C")
+          : T("烤箱溫度 180°C", "Oven 180°C");
         dom.bakeNote.classList.remove("is-hot");
       }
     }
@@ -317,12 +322,14 @@
     state.mixPulse = 0.55;
     emit("mix");
     updateHud();
-    setStatus(state.mixTaps >= MIX_NEEDED ? "麵糊拌好了。" : `再攪拌 ${MIX_NEEDED - state.mixTaps} 下。`);
+    setStatus(state.mixTaps >= MIX_NEEDED
+      ? T("麵糊拌好了。", "The batter is ready.")
+      : T(`再攪拌 ${MIX_NEEDED - state.mixTaps} 下。`, `Stir ${MIX_NEEDED - state.mixTaps} more times.`));
     if (state.mixTaps >= MIX_NEEDED) {
       window.setTimeout(() => {
         if (state.open && !state.complete && state.step === 1) {
           setStep(2);
-          setStatus("麵糊完成。現在送進烤箱。");
+          setStatus(T("麵糊完成。現在送進烤箱。", "Batter ready. Now into the oven."));
           emit("mixDone");
         }
       }, 420);
@@ -334,7 +341,7 @@
     state.baking = true;
     emit("bake");
     updateHud();
-    setStatus("烤箱裡傳出甜甜的香氣。");
+    setStatus(T("烤箱裡傳出甜甜的香氣。", "A sweet smell drifts from the oven."));
     if (dom.bakeBar) {
       dom.bakeBar.style.transition = "none";
       dom.bakeBar.style.width = "0%";
@@ -360,7 +367,7 @@
     emit("bakeDone");
     spawnSteam();
     updateHud();
-    setStatus("蛋糕出爐了。照著食譜裝飾它。");
+    setStatus(T("蛋糕出爐了。照著食譜裝飾它。", "The cake is out. Follow the recipe to decorate it."));
   }
 
   function addBerry() {
@@ -371,11 +378,11 @@
     emit("decorate");
     updateHud();
     if (state.berries >= state.recipe.berries && state.candles >= state.recipe.candles) {
-      setStatus("裝飾完成。可以點燃蠟燭了。");
+      setStatus(T("裝飾完成。可以點燃蠟燭了。", "Decorating done. Time to light the candles."));
     } else if (state.berries >= state.recipe.berries) {
-      setStatus("草莓放好了。");
+      setStatus(T("草莓放好了。", "Strawberries placed."));
     } else {
-      setStatus(`再放 ${state.recipe.berries - state.berries} 顆草莓。`);
+      setStatus(T(`再放 ${state.recipe.berries - state.berries} 顆草莓。`, `Add ${state.recipe.berries - state.berries} more strawberries.`));
     }
   }
 
@@ -387,11 +394,11 @@
     emit("decorate");
     updateHud();
     if (state.berries >= state.recipe.berries && state.candles >= state.recipe.candles) {
-      setStatus("裝飾完成。可以點燃蠟燭了。");
+      setStatus(T("裝飾完成。可以點燃蠟燭了。", "Decorating done. Time to light the candles."));
     } else if (state.candles >= state.recipe.candles) {
-      setStatus("蠟燭插好了。");
+      setStatus(T("蠟燭插好了。", "Candles placed."));
     } else {
-      setStatus(`再插 ${state.recipe.candles - state.candles} 根蠟燭。`);
+      setStatus(T(`再插 ${state.recipe.candles - state.candles} 根蠟燭。`, `Add ${state.recipe.candles - state.candles} more candles.`));
     }
   }
 
@@ -401,7 +408,7 @@
     state.completing = true;
     state.lit = true;
     updateHud();
-    setStatus("蛋糕完成。第三道門正在打開。", true);
+    setStatus(T("蛋糕完成。第三道門正在打開。", "The cake is finished. The third gate is opening."), true);
     lightCandles();
     spawnThreeConfetti();
     emit("complete");
@@ -456,7 +463,7 @@
       return;
     }
     if (!window.THREE) {
-      failScene("Three.js 沒有載入。");
+      failScene(T("Three.js 沒有載入。", "Three.js did not load."));
       return;
     }
 
@@ -521,11 +528,11 @@
 
       dom.canvas.addEventListener("webglcontextlost", (event) => {
         event.preventDefault();
-        failScene("WebGL 圖形中斷。");
+        failScene(T("WebGL 圖形中斷。", "WebGL was interrupted."));
       });
     } catch (error) {
       console.warn("BirthdayKitchen:", error);
-      failScene("這個瀏覽器暫時無法顯示 3D 廚房。");
+      failScene(T("這個瀏覽器暫時無法顯示 3D 廚房。", "This browser cannot display the 3D kitchen right now."));
     }
   }
 
@@ -537,7 +544,10 @@
     if (dom.fallback) {
       dom.fallback.hidden = false;
       const text = dom.fallback.querySelector("span:last-child");
-      if (text) text.textContent = `${message} 仍可以用旁邊的按鈕完成蛋糕。`;
+      if (text) text.textContent = T(
+        `${message} 仍可以用旁邊的按鈕完成蛋糕。`,
+        `${message} You can still finish the cake with the buttons beside it.`
+      );
     }
     if (dom.canvas) dom.canvas.style.display = "none";
     if (state.three && state.three.resizeObserver) state.three.resizeObserver.disconnect();
@@ -612,7 +622,7 @@
     ctx.fill();
     ctx.stroke();
     ctx.fillStyle = "#f8e5bc";
-    ctx.font = '600 33px "PingFang TC", "Noto Sans TC", sans-serif';
+    ctx.font = `600 ${text.length > 8 ? 25 : 33}px "PingFang TC", "Noto Sans TC", sans-serif`;
     ctx.shadowColor = "rgba(0, 0, 0, .45)";
     ctx.shadowBlur = 4;
     ctx.textAlign = "center";
@@ -961,7 +971,7 @@
     }
     mixGroup.add(whisk);
     state.three.whisk = whisk;
-    mixGroup.add(makeLabel("鋼盆"));
+    mixGroup.add(makeLabel(T("鋼盆", "Mixing bowl")));
     mixGroup.children[mixGroup.children.length - 1].position.set(0, 1.15, 0);
     state.three.labels.mix = mixGroup.children[mixGroup.children.length - 1];
     state.three.mixGroup = mixGroup;
@@ -980,7 +990,7 @@
       berry.scale.setScalar(0.85);
       berryGroup.add(berry);
     }
-    berryGroup.add(makeLabel("草莓"));
+    berryGroup.add(makeLabel(T("草莓", "Strawberries")));
     berryGroup.children[berryGroup.children.length - 1].position.set(0, 1.12, 0);
     state.three.labels.berry = berryGroup.children[berryGroup.children.length - 1];
     scene.add(berryGroup);
@@ -997,7 +1007,7 @@
       candle.scale.setScalar(0.86);
       candleGroup.add(candle);
     }
-    candleGroup.add(makeLabel("蠟燭"));
+    candleGroup.add(makeLabel(T("蠟燭", "Candles")));
     candleGroup.children[candleGroup.children.length - 1].position.set(0.12, 1.42, 0);
     state.three.labels.candle = candleGroup.children[candleGroup.children.length - 1];
     scene.add(candleGroup);
@@ -1073,7 +1083,7 @@
     scene.add(makeHitSphere([candlePos.x, 0.5, candlePos.z], 0.76, "candle"));
 
     // labels for the oven and stations
-    const ovenLabel = makeLabel("烤箱");
+    const ovenLabel = makeLabel(T("烤箱", "Oven"));
     ovenLabel.position.set(-2.9, 2.9, -3.8);
     scene.add(ovenLabel);
     state.three.labels.oven = ovenLabel;

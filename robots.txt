@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://s20250051-cpu.github.io/ting123/sitemap.xml

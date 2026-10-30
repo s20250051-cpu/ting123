@@ -3333,3 +3333,135 @@ body.is-kitchen-open { overflow: hidden; }
 @media (prefers-reduced-motion: reduce) {
   .kitchen-loader-ring { animation: none; }
 }
+
+/* ══════════════════════════════════════════════════════════════════
+   Play page · language switch, back link and English fit
+   ══════════════════════════════════════════════════════════════════ */
+
+.site-back {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 0;
+  color: #a99b7e;
+  font-size: 10px;
+  letter-spacing: .1em;
+  border-bottom: 1px solid transparent;
+  transition: color .25s, border-color .25s;
+}
+
+.site-back .icon { width: 14px; height: 14px; transform: rotate(180deg); }
+.site-back:hover { color: var(--gold-light); border-color: rgba(215, 168, 91, .45); }
+
+.play-lang {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px;
+  border: 1px solid rgba(215, 168, 91, .24);
+  border-radius: 999px;
+  background: rgba(9, 18, 21, .45);
+}
+
+.play-lang a {
+  display: grid;
+  place-items: center;
+  min-width: 25px;
+  height: 23px;
+  padding: 0 5px;
+  color: #91866f;
+  font-family: var(--mono);
+  font-size: 8px;
+  line-height: 1;
+  border-radius: 999px;
+  transition: color .25s, background .25s;
+}
+
+.play-lang a.is-active {
+  color: #16211d;
+  background: var(--gold-light);
+}
+
+.play-lang a:hover { color: var(--gold-light); }
+.play-lang a.is-active:hover { color: #16211d; }
+
+body[data-screen="game"] .play-lang,
+body[data-screen="final"] .play-lang { display: none; }
+
+.landing-author {
+  color: #a58a61;
+  font-family: var(--serif);
+  letter-spacing: .08em;
+}
+
+html[lang="en"] .date-readout small { display: none; }
+html[lang="en"] #readout-month { margin-right: 3px; }
+html[lang="en"] .room-paper { display: none; }
+
+html[lang="en"] .level-panel h2,
+html[lang="en"] .panel-heading h2 { letter-spacing: .02em; }
+html[lang="en"] .story,
+html[lang="en"] .story q,
+html[lang="en"] .notebook-tip,
+html[lang="en"] .clue-text,
+html[lang="en"] .invitation-line,
+html[lang="en"] .invitation-math span,
+html[lang="en"] .kitchen-launch p:not(.eyebrow) { letter-spacing: 0; }
+html[lang="en"] .step-text b { font-size: 11px; letter-spacing: .04em; }
+html[lang="en"] .step-text small { font-size: 7.5px; }
+html[lang="en"] .topbar-note { max-width: 260px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+html[lang="en"] .landing-footer { letter-spacing: .03em; }
+html[lang="en"] .hint-item { line-height: 1.75; }
+html[lang="en"] .kitchen-header h2 { letter-spacing: .05em; }
+html[lang="en"] .kitchen-hud .kitchen-step-panel > p:not(.kitchen-step-kicker):not(.kitchen-bake-note) { letter-spacing: 0; }
+html[lang="en"] .kitchen-chip { letter-spacing: .02em; }
+html[lang="en"] .kitchen-recipe-row { font-family: var(--sans); letter-spacing: .02em; }
+html[lang="en"] .final-card h2 { letter-spacing: .03em; }
+html[lang="en"] .final-copy { letter-spacing: .01em; }
+html[lang="en"] .final-rank strong { letter-spacing: .04em; }
+html[lang="en"] .date-label { letter-spacing: .1em; }
+html[lang="en"] .month-tab { font-size: 8px; letter-spacing: 0; }
+
+@media (max-width: 1180px) {
+  html[lang="en"] .topbar-note { display: none; }
+}
+
+@media (max-width: 720px) {
+  .site-back {
+    width: 40px;
+    height: 40px;
+    justify-content: center;
+    padding: 0;
+    border: 1px solid rgba(215, 168, 91, .24);
+    border-radius: 50%;
+  }
+  .site-back span { display: none; }
+  .site-back .icon { width: 16px; height: 16px; }
+  .play-lang { padding: 1px; }
+  .play-lang a { min-width: 24px; height: 23px; font-size: 7px; }
+  html[lang="en"] .step-text b { font-size: 9px; letter-spacing: 0; }
+  html[lang="en"] .topbar-note { display: none; }
+  html[lang="en"] .level-chips li { font-size: 9px; }
+}
+
+
+/* English-specific fit refinements for the play page */
+html[lang="en"] .clue-list li { grid-template-columns: 18px 88px minmax(0, 1fr); }
+html[lang="en"] .clue-name { font-size: 9.5px; letter-spacing: 0; }
+html[lang="en"] .month-tab.is-selected {
+  color: #fff4e1;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: .01em;
+}
+html[lang="en"] .day-btn.is-selected { color: #fff4e1; font-size: 10px; font-weight: 600; }
+html[lang="en"] .final-seal { font-size: 14px; letter-spacing: .03em; }
+html[lang="en"] .final-seal::before { inset: 5px; }
+html[lang="en"] .notebook { padding-top: 14px; }
+
+
+/* English quotation marks and slightly larger clue copy */
+html[lang="en"] q::before { content: "“"; }
+html[lang="en"] q::after { content: "”"; }
+html[lang="en"] .clue-list li { grid-template-columns: 18px 80px minmax(0, 1fr); }
+html[lang="en"] .clue-name { font-size: 10.5px; }
+html[lang="en"] .clue-text { font-size: 11.5px; line-height: 1.65; }
