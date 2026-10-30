@@ -1,90 +1,82 @@
 # 三關謎城 · The Three Gates
 
-> 三道門，三種謎。答對，門才會開。
+An original three-act browser puzzle with a real-time 3D birthday-kitchen finale.
 
-一個可直接在瀏覽器遊玩的單頁解謎遊戲，包含三道關卡：
+**三關解謎 · 答對才過關** — three gates, three kinds of puzzles, and a door that only opens on the right answer.
 
-| 關卡 | 題型 | 場景 |
-| --- | --- | --- |
-| I | 數學題 | 齒輪鐘樓 |
-| II | 密室逃脫 | 無聲書房 |
-| III | 生日謎題 + 3D 煮食 | 缺席的日期 → 生日廚房 |
+- **Live commercial site:** https://s20250051-cpu.github.io/ting123/
+- **Play the game:** https://s20250051-cpu.github.io/ting123/play.html
+- **Repository:** https://github.com/s20250051-cpu/ting123
+- **Creator:** **2B 劉清婷** · Class 2B
+- **Languages:** Traditional Chinese (繁體中文) and English
 
-![三關謎城 · 3D 生日廚房](preview-kitchen.jpg)
+---
 
-## 執行方式
+## 專案簡介 / About the project
 
-最簡單的方式：直接用瀏覽器開啟 `index.html`。
+《三關謎城》是一場約 5–10 分鐘的瀏覽器解謎體驗。玩家要依序通過三道門：
 
-若想使用本機伺服器：
+1. **數學題 · 齒輪鐘樓** — 從齒輪算式推算出三個符號，解開停擺的鐘塔。
+2. **密室逃脫 · 無聲書房** — 調查書架、畫作、掛鐘與抽屜，按紙條順序拼出四位數密碼。
+3. **生日謎題 · 缺席的日期** — 從乘積與加總找出唯一日期，再走進 Three.js 即時 3D 廚房，攪拌、烘焙、裝飾生日蛋糕。
 
-在專案資料夾執行：
+所有謎題每次重新生成：數學數值、密室線索與順序、生日日期與蛋糕食譜都不一樣。遊戲支援提示、計時、音效開關、最佳紀錄、手機版面和 WebGL 備援操作。
+
+The Three Gates is a five-to-ten-minute browser puzzle in three acts: a clockwork mathematics chamber, a locked study escape room, and a birthday riddle that leads into a real-time Three.js kitchen. Puzzles regenerate on every run. Hints, timer, sound toggle, best record, responsive layout and a WebGL fallback are included.
+
+## 商業網站 / Commercial site
+
+The root page is a bilingual product site introducing the experience: the three chapters, the 3D kitchen, features, use cases, creator story and FAQ. The game itself lives on `play.html` so the marketing site can use a full editorial layout without changing the game's mechanics or asset paths.
+
+- Marketing site: `index.html` + `site.css` + `site.js`
+- Game: `play.html` + `styles.css` + `app.js` + `kitchen.js` + `play-lang.js`
+- Shared visual assets: `assets/`
+- Three.js r149 is vendored locally at `vendor/three.min.js`; there are no external runtime dependencies.
+
+### 語言 / Language
+
+Choose **中** or **EN** on the site, or use `?lang=zh-Hant` / `?lang=en`. The preference is stored in `localStorage` and passed into the game. The game landing page has its own language switch; once a run begins, the language is fixed for that run.
+
+## 本機執行 / Run locally
+
+No build step is required. From this directory:
 
 ```bash
 python3 -m http.server 4173
 ```
 
-再前往 <http://127.0.0.1:4173>。
+Open <http://127.0.0.1:4173/> for the commercial site or <http://127.0.0.1:4173/play.html> for the game.
 
-不需要安裝任何套件，所有插畫、動畫、音效與邏輯都內建於這個資料夾，離線也能玩。
+## 功能 / Features
 
-## 玩法
+- Three complete puzzle levels with randomized content on every run
+- Three.js r149 3D kitchen with mixing, baking, strawberries and candles
+- Clickable 3D objects plus accessible button controls
+- Two-stage hints per level; wrong answers never open a gate
+- Timer, mistake/hint counters and a personal best stored locally
+- Synthesized Web Audio sound, with a mute control
+- Traditional Chinese and English copy across the site and game
+- Responsive layout for desktop, tablet and phone
+- Keyboard paths, visible focus, screen-reader labels and `prefers-reduced-motion` support
+- WebGL fallback that keeps the cooking steps playable
+- SEO metadata, Open Graph cover, JSON-LD, `robots.txt` and `sitemap.xml`
 
-- 每一關都必須輸入／選出正確答案，門才會開啟；答錯不會前進。
-- 第二關可點擊場景中的四個放大鏡蒐集線索，再輸入四位數密碼。
-- 第三關先從日曆選出月份與日期；日期正確後會走進 Three.js 的 3D 生日廚房。
-- 廚房裡要依序攪拌麵糊、送進烤箱，再照食譜放上草莓與蠟燭，完成蛋糕後第三道門才會開啟。
-- 廚房中可點擊 3D 場景裡的鋼盆、烤箱與食材，也可以使用右側／下方的按鈕；臨時離開廚房後可以再回來繼續。
-- 卡住時可使用每關兩段提示；提示不影響能否過關。
-- 右上角可切換音效、重新開始。通關時間與最佳紀錄會存在瀏覽器的 `localStorage`。
+## 技術 / Built with
 
-## 特色
+- Vanilla HTML, CSS and JavaScript (no framework, no build step)
+- Hand-drawn SVG scenes and CSS animation
+- Three.js r149, vendored as a UMD global
+- Web Audio API synthesis
+- `localStorage` for language, sound and best record
+- GitHub Pages branch deployment from `main`
 
-- 全自製的 2D SVG 場景與 Three.js 3D 廚房，沒有外部圖片或字型依賴。
-- **三關題目都會在每次重新開始時重新生成**：數學數值、密室四位數密碼／場景線索／紙條順序、生日乘積／加總與正確日期都不固定。
-- **第三關包含真實 3D 煮食小遊戲**：以 Three.js 建立即時光影的生日廚房，包含攪拌、烘焙、草莓與蠟燭裝飾；蛋糕食譜會依當局生日日期變化。
-- 答對才過關的關卡閘門、錯答震動回饋、提示抽屜、轉場動畫、通關彩紙。
-- WebGL 無法使用時會顯示提示，仍可用按鈕完成煮食流程。
-- Web Audio 即時合成音效，無音訊檔案。
-- 支援手機、平板與桌機；鍵盤操作與 `prefers-reduced-motion`。
-- 通關成績可一鍵複製分享。
+## 作者 / Author
 
-## 專案結構
+**2B 劉清婷**  
+Creator · Designer · Developer
 
-```
-.
-├── index.html          # 頁面、三關場景、3D 廚房介面
-├── styles.css          # 視覺系統、場景樣式、響應式版面與動畫
-├── app.js              # 遊戲狀態、出題、線索、日期選擇、音效與轉場
-├── kitchen.js          # Three.js 生日廚房：3D 場景、煮食步驟與互動
-├── vendor/
-│   └── three.min.js    # Three.js r149（MIT，本地內嵌，離線可用）
-├── preview-kitchen.jpg
-└── README.md
-```
+Class 2B · 2026
 
-## 想改題目？
+## 授權 / License
 
-- **數學題**：修改 `app.js` 裡的 `makeMathPuzzle()`，保持三個符號有唯一解即可。
-- **密室密碼**：修改 `makeRoomPuzzle()` 的隨機範圍，以及 `buildRoomClues()` 對應的線索文字。場景中的書背數字、白鴿、時針、彈珠與紙條順序會由 `applyRoomPuzzle()` 同步更新。
-- **生日日期**：修改 `makeBirthdayPuzzle()`。目前刻意讓「日期大於 12」，確保乘積／加總只會指向唯一一組月、日；若改動規則，請保留這個唯一性。
-- **蛋糕與 3D 廚房**：`cakeRecipeFor()` 會依日期算出草莓與蠟燭數量；3D 場景、物件、光影與煮食動畫都在 `kitchen.js`。`styles.css` 末尾是廚房介面的樣式。
-
----
-
-<details>
-<summary>卡關時的解題方向（沒有固定答案）</summary>
-
-1. **齒輪鐘樓**：由前三行依序解出齒輪、鑰匙、蠟燭；最後一行記得先乘除、後加減。
-2. **無聲書房**：依照紙條上這一局重新排列的順序（例如「鐘→畫→抽屜→書」）取出四個數字。書背是羅馬數字；白鴿、時針、彈珠的數量都在場景與線索裡。
-3. **缺席的日期**：把邀請函上的乘積拆成兩個整數相乘，找到相加等於邀請函第二個數字的那一組。因為日期大於 12，答案只會有一組。
-4. **生日廚房**：依序按「攪拌一下」五次、送進烤箱，再依照食譜計數放上草莓與蠟燭。3D 場景沒有亮起時，使用按鈕也能完成。
-
-</details>
-
-
-## GitHub Pages
-
-專案的 `main` 分支根目錄即為靜態網站來源；每次推送或合併到 `main`，GitHub Pages 會自動重新部署。
-
-<https://s20250051-cpu.github.io/ting123/>
+Original project work by **2B 劉清婷**. Please contact the author before commercial redistribution.

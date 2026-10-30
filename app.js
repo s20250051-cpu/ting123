@@ -9,15 +9,34 @@
   const $ = (selector, scope = document) => scope.querySelector(selector);
   const $$ = (selector, scope = document) => Array.from(scope.querySelectorAll(selector));
 
+  const EN = window.GAME_LANG === "en";
+  const T = (zh, en) => (EN ? en : zh);
+
   const LEVELS = {
-    1: { name: "數學題", room: "齒輪鐘樓", roman: "I", cn: "第一" },
-    2: { name: "密室逃脫", room: "無聲書房", roman: "II", cn: "第二" },
-    3: { name: "生日謎題", room: "缺席的日期", roman: "III", cn: "第三" }
+    1: { name: "數學題", nameEn: "Mathematics", room: "齒輪鐘樓", roomEn: "The Clockwork Tower", roman: "I", cn: "第一", ordinalEn: "first" },
+    2: { name: "密室逃脫", nameEn: "Escape Room", room: "無聲書房", roomEn: "The Silent Study", roman: "II", cn: "第二", ordinalEn: "second" },
+    3: { name: "生日謎題", nameEn: "Birthday Riddle", room: "缺席的日期", roomEn: "The Missing Date", roman: "III", cn: "第三", ordinalEn: "third" }
   };
 
   const ROMAN = ["", "I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX"];
   const ROOM_SPOTS = ["books", "painting", "clock", "drawer"];
-  const ROOM_NAMES = { books: "書", painting: "畫", clock: "鐘", drawer: "抽屜" };
+  const ROOM_NAMES = {
+    books: { zh: "書", en: "Book" },
+    painting: { zh: "畫", en: "Painting" },
+    clock: { zh: "鐘", en: "Clock" },
+    drawer: { zh: "抽屜", en: "Drawer" }
+  };
+  const MONTHS_EN = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+  const MONTHS_SHORT_EN = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+  const WEEKDAYS_EN = ["S", "M", "T", "W", "T", "F", "S"];
+
+  function roomOrderText(order, separator) {
+    return order.map((spot) => (EN ? ROOM_NAMES[spot].en : ROOM_NAMES[spot].zh)).join(separator);
+  }
+
+  function formatDateLabel(month, day) {
+    return EN ? `${MONTHS_EN[month - 1]} ${day}` : `${month} 月 ${day} 日`;
+  }
 
   function toRoman(value) {
     return ROMAN[value] || String(value);
@@ -92,24 +111,36 @@
     const roman = toRoman(room.book);
     return {
       books: {
-        name: "書架",
-        text: `第 ${roman} 卷歪了出來，書背是暗紅色的。`,
-        toast: `找到線索：第 ${roman} 卷歪了出來。`
+        name: T("書架", "Bookshelf"),
+        text: T(
+          `第 ${roman} 卷歪了出來，書背是暗紅色的。`,
+          `The volume marked ${roman} is sticking out. Its spine is deep red.`
+        ),
+        toast: T(`找到線索：第 ${roman} 卷歪了出來。`, `Clue found: the volume marked ${roman}.`)
       },
       painting: {
-        name: "畫作",
-        text: `畫中有 ${room.birds} 隻白鴿，朝著窗外的月亮飛。`,
-        toast: `找到線索：畫裡有 ${room.birds} 隻白鴿。`
+        name: T("畫作", "Painting"),
+        text: T(
+          `畫中有 ${room.birds} 隻白鴿，朝著窗外的月亮飛。`,
+          `${room.birds} white doves fly toward the moon outside the window.`
+        ),
+        toast: T(`找到線索：畫裡有 ${room.birds} 隻白鴿。`, `Clue found: ${room.birds} white doves.`)
       },
       clock: {
-        name: "掛鐘",
-        text: `時針停在 ${room.hour}，分針指著 12。鐘擺卻還在動。`,
-        toast: `找到線索：時針停在 ${room.hour} 點。`
+        name: T("掛鐘", "Clock"),
+        text: T(
+          `時針停在 ${room.hour}，分針指著 12。鐘擺卻還在動。`,
+          `The hour hand rests on ${room.hour}; the minute hand points to 12. The pendulum still moves.`
+        ),
+        toast: T(`找到線索：時針停在 ${room.hour} 點。`, `Clue found: the hour hand rests on ${room.hour}.`)
       },
       drawer: {
-        name: "抽屜",
-        text: `抽屜裡躺著 ${room.marbles} 顆藍色彈珠。`,
-        toast: `找到線索：抽屜裡有 ${room.marbles} 顆彈珠。`
+        name: T("抽屜", "Drawer"),
+        text: T(
+          `抽屜裡躺著 ${room.marbles} 顆藍色彈珠。`,
+          `${room.marbles} blue marbles lie on the velvet inside the drawer.`
+        ),
+        toast: T(`找到線索：抽屜裡有 ${room.marbles} 顆彈珠。`, `Clue found: ${room.marbles} blue marbles.`)
       }
     };
   }
@@ -134,37 +165,55 @@
 
   const HINTS = {
     1: [
-      () => `三個齒輪相加是 ${state.math.sum1}，所以一個齒輪是 ${state.math.gear}。從第一行開始，逐一算出每個符號。`,
-      () => "算出齒輪、鑰匙和蠟燭之後，別忘了：先乘除，後加減。"
+      () => T(
+        `三個齒輪相加是 ${state.math.sum1}，所以一個齒輪是 ${state.math.gear}。從第一行開始，逐一算出每個符號。`,
+        `Three gears add up to ${state.math.sum1}, so one gear is ${state.math.gear}. Start with the first row and work out each symbol.`
+      ),
+      () => T(
+        "算出齒輪、鑰匙和蠟燭之後，別忘了：先乘除，後加減。",
+        "Once you have the gear, key and candle, remember: multiplication comes before addition."
+      )
     ],
     2: [
-      () => `紙條的順序是：${state.room.order.map((spot) => ROOM_NAMES[spot]).join("、")}。每一個地方只需要一個數字，把它們依序排好。`,
-      () => `書背上的羅馬數字是 ${toRoman(state.room.book)}（${state.room.book}）；畫裡有 ${state.room.birds} 隻白鴿；時針停在 ${state.room.hour}；抽屜裡有 ${state.room.marbles} 顆彈珠。`
+      () => T(
+        `紙條的順序是：${roomOrderText(state.room.order, "、")}。每一個地方只需要一個數字，把它們依序排好。`,
+        `The note's order is: ${roomOrderText(state.room.order, ", ")}. Each place gives one digit; line them up in that order.`
+      ),
+      () => T(
+        `書背上的羅馬數字是 ${toRoman(state.room.book)}（${state.room.book}）；畫裡有 ${state.room.birds} 隻白鴿；時針停在 ${state.room.hour}；抽屜裡有 ${state.room.marbles} 顆彈珠。`,
+        `The Roman numeral on the book is ${toRoman(state.room.book)} (${state.room.book}); the painting has ${state.room.birds} doves; the hour hand rests on ${state.room.hour}; the drawer holds ${state.room.marbles} marbles.`
+      )
     ],
     3: [
-      () => `把 ${state.birthday.product} 拆成兩個整數相乘，再找哪一組相加會等於 ${state.birthday.sum}。`,
-      () => `${state.birthday.month} × ${state.birthday.day} = ${state.birthday.product}，${state.birthday.month} + ${state.birthday.day} = ${state.birthday.sum}。月份是 ${state.birthday.month}，日期是 ${state.birthday.day}。`
+      () => T(
+        `把 ${state.birthday.product} 拆成兩個整數相乘，再找哪一組相加會等於 ${state.birthday.sum}。`,
+        `Factor ${state.birthday.product} into two integers, then find the pair that adds up to ${state.birthday.sum}.`
+      ),
+      () => T(
+        `${state.birthday.month} × ${state.birthday.day} = ${state.birthday.product}，${state.birthday.month} + ${state.birthday.day} = ${state.birthday.sum}。月份是 ${state.birthday.month}，日期是 ${state.birthday.day}。`,
+        `${state.birthday.month} × ${state.birthday.day} = ${state.birthday.product}, and ${state.birthday.month} + ${state.birthday.day} = ${state.birthday.sum}. The month is ${state.birthday.month}; the day is ${state.birthday.day}.`
+      )
     ]
   };
 
   const WRONG_MESSAGES = {
     1: [
-      "齒輪沒有咬合。再檢查一次。",
-      "差一點。注意：乘法會比加法先發生。",
-      "還是不對。三個符號的值，可以從前三行逐一推出來。",
-      "鐘塔沒有動。慢慢來，答案不需要用猜的。"
+      T("齒輪沒有咬合。再檢查一次。", "The gears do not mesh. Check again."),
+      T("差一點。注意：乘法會比加法先發生。", "So close. Remember: multiplication happens before addition."),
+      T("還是不對。三個符號的值，可以從前三行逐一推出來。", "Not yet. Work out the three symbols from the first three rows, one at a time."),
+      T("鐘塔沒有動。慢慢來，答案不需要用猜的。", "The tower has not moved. Take your time; guessing is not required.")
     ],
     2: [
-      "門鎖紋絲不動。數字不對。",
-      "沉悶的一聲。再讀一遍線索與桌上的紙條。",
-      "不是這四個數字。紙條上的順序，就是密碼的順序。",
-      "門沒有開。房間裡還有沒被讀清楚的細節。"
+      T("門鎖紋絲不動。數字不對。", "The lock does not budge. The digits are wrong."),
+      T("沉悶的一聲。再讀一遍線索與桌上的紙條。", "A dull thud. Read the clues and the note again."),
+      T("不是這四個數字。紙條上的順序，就是密碼的順序。", "Not those four digits. The order on the note is the order of the code."),
+      T("門沒有開。房間裡還有沒被讀清楚的細節。", "The door stays shut. Something in the room has not been read closely enough.")
     ],
     3: [
-      "邀請函上的日期不對。",
-      "門沒有動。再想想那兩行數字。",
-      "不是這一天。符合條件的日期，只有一組。",
-      "蠟燭沒有亮。先把邀請函上的乘積拆成兩個數。"
+      T("邀請函上的日期不對。", "The date on the invitation is wrong."),
+      T("門沒有動。再想想那兩行數字。", "The gate has not moved. Think about those two lines again."),
+      T("不是這一天。符合條件的日期，只有一組。", "Not that day. Only one date fits both clues."),
+      T("蠟燭沒有亮。先把邀請函上的乘積拆成兩個數。", "The candles stay dark. Start by factoring the product on the invitation.")
     ]
   };
 
@@ -452,8 +501,8 @@
     state.sound = Boolean(enabled);
     document.body.classList.toggle("is-sound-off", !state.sound);
     el.soundBtn.setAttribute("aria-pressed", String(state.sound));
-    el.soundBtn.setAttribute("aria-label", state.sound ? "關閉音效" : "開啟音效");
-    el.soundBtn.title = state.sound ? "關閉音效" : "開啟音效";
+    el.soundBtn.setAttribute("aria-label", T(state.sound ? "關閉音效" : "開啟音效", state.sound ? "Mute sound" : "Unmute sound"));
+    el.soundBtn.title = T(state.sound ? "關閉音效" : "開啟音效", state.sound ? "Mute sound" : "Unmute sound");
     storageSet(STORAGE.sound, state.sound);
     if (state.sound && announce) {
       // Resume the context inside the user gesture.
@@ -472,12 +521,12 @@
     el.restartBtn.hidden = name !== "game";
 
     if (name === "landing") {
-      el.topbarNote.textContent = "一場合乎好奇心的夜遊";
+      el.topbarNote.textContent = T("一場合乎好奇心的夜遊", "An evening for the curious");
       renderBestRecord();
     } else if (name === "game") {
-      el.topbarNote.textContent = `第 ${state.level} 關 · ${LEVELS[state.level].room}`;
+      el.topbarNote.textContent = T(`第 ${state.level} 關 · ${LEVELS[state.level].room}`, `Chapter ${state.level} · ${LEVELS[state.level].roomEn}`);
     } else if (name === "final") {
-      el.topbarNote.textContent = "三道門，皆已開啟";
+      el.topbarNote.textContent = T("三道門，皆已開啟", "All three gates are open");
     }
   }
 
@@ -528,7 +577,7 @@
     });
 
     el.lockCount.textContent = `${level} / 3`;
-    el.topbarNote.textContent = `第 ${level} 關 · ${LEVELS[level].room}`;
+    el.topbarNote.textContent = T(`第 ${level} 關 · ${LEVELS[level].room}`, `Chapter ${level} · ${LEVELS[level].roomEn}`);
 
     window.scrollTo({ top: 0, behavior: "auto" });
     window.setTimeout(() => focusTitle(level), 360);
@@ -542,10 +591,10 @@
     const info = LEVELS[from];
     el.passageKicker.textContent = `GATE ${info.roman} · OPEN`;
     el.passageNumeral.textContent = info.roman;
-    el.passageTitle.textContent = `${info.cn}道門，開了`;
+    el.passageTitle.textContent = T(`${info.cn}道門，開了`, `The ${info.ordinalEn} gate is open`);
     el.passageNext.textContent = nextLevel
-      ? `下一關 · ${LEVELS[nextLevel].name}`
-      : "終點 · 三關皆開";
+      ? T(`下一關 · ${LEVELS[nextLevel].name}`, `Next · ${LEVELS[nextLevel].nameEn}`)
+      : T("終點 · 三關皆開", "Final · All three gates open");
 
     playSound("door");
     el.passage.classList.remove("is-leaving");
@@ -651,12 +700,13 @@
     }
 
     el.finalBest.textContent = isNewBest
-      ? `新紀錄 · ${formatted}`
-      : `最佳紀錄 · ${formatTime(state.best.ms)}`;
+      ? T(`新紀錄 · ${formatted}`, `New record · ${formatted}`)
+      : T(`最佳紀錄 · ${formatTime(state.best.ms)}`, `Best · ${formatTime(state.best.ms)}`);
     if (state.best && state.best.at) {
       const date = new Date(state.best.at);
       if (!Number.isNaN(date.getTime())) {
-        el.finalBest.title = `紀錄於 ${date.toLocaleDateString("zh-Hant-TW")}`;
+        const dateText = date.toLocaleDateString(EN ? "en-HK" : "zh-Hant-TW");
+        el.finalBest.title = T(`紀錄於 ${dateText}`, `Recorded on ${dateText}`);
       }
     }
 
@@ -674,21 +724,22 @@
   }
 
   function rankFor(wrong, hints) {
-    if (wrong === 0 && hints === 0) return "完美破題者";
-    if (wrong <= 2 && hints <= 1) return "謎城解謎大師";
-    if (wrong <= 4 && hints <= 3) return "冷靜的破題者";
-    return "堅持到底的旅人";
+    if (wrong === 0 && hints === 0) return T("完美破題者", "The flawless solver");
+    if (wrong <= 2 && hints <= 1) return T("謎城解謎大師", "Master of the gates");
+    if (wrong <= 4 && hints <= 3) return T("冷靜的破題者", "The calm solver");
+    return T("堅持到底的旅人", "The persistent wanderer");
   }
 
   function renderBestRecord() {
     if (state.best && Number.isFinite(state.best.ms)) {
-      el.bestRecord.textContent = `最佳紀錄 · ${formatTime(state.best.ms)}`;
+      el.bestRecord.textContent = T(`最佳紀錄 · ${formatTime(state.best.ms)}`, `Best · ${formatTime(state.best.ms)}`);
       const date = state.best.at ? new Date(state.best.at) : null;
       if (date && !Number.isNaN(date.getTime())) {
-        el.bestRecord.title = `通關於 ${date.toLocaleDateString("zh-Hant-TW")}`;
+        const dateText = date.toLocaleDateString(EN ? "en-HK" : "zh-Hant-TW");
+        el.bestRecord.title = T(`通關於 ${dateText}`, `Completed on ${dateText}`);
       }
     } else {
-      el.bestRecord.textContent = "尚未留下通關紀錄";
+      el.bestRecord.textContent = T("尚未留下通關紀錄", "No completed run yet");
       el.bestRecord.removeAttribute("title");
     }
   }
@@ -709,30 +760,30 @@
 
   function renderMathPuzzle() {
     const puzzle = state.math;
-    const gear = iconTerm("gear", "齒輪");
-    const key = iconTerm("key", "鑰匙");
-    const candle = iconTerm("candle", "蠟燭");
+    const gear = iconTerm("gear", T("齒輪", "Gear"));
+    const key = iconTerm("key", T("鑰匙", "Key"));
+    const candle = iconTerm("candle", T("蠟燭", "Candle"));
 
     el.equations.innerHTML = [
       equationRow(
         `${gear}${operator("+")}${gear}${operator("+")}${gear}`,
         puzzle.sum1,
-        `齒輪加齒輪加齒輪等於${puzzle.sum1}`
+        T(`齒輪加齒輪加齒輪等於${puzzle.sum1}`, `Gear plus gear plus gear equals ${puzzle.sum1}`)
       ),
       equationRow(
         `${gear}${operator("+")}${key}${operator("+")}${key}`,
         puzzle.sum2,
-        `齒輪加鑰匙加鑰匙等於${puzzle.sum2}`
+        T(`齒輪加鑰匙加鑰匙等於${puzzle.sum2}`, `Gear plus key plus key equals ${puzzle.sum2}`)
       ),
       equationRow(
         `${key}${operator("−")}${candle}`,
         puzzle.diff,
-        `鑰匙減蠟燭等於${puzzle.diff}`
+        T(`鑰匙減蠟燭等於${puzzle.diff}`, `Key minus candle equals ${puzzle.diff}`)
       )
     ].join("");
 
     el.targetExpression.innerHTML = `${candle}${operator("+")}${gear}${operator("×")}${key}`;
-    el.targetExpression.setAttribute("aria-label", "蠟燭加齒輪乘以鑰匙，等於多少");
+    el.targetExpression.setAttribute("aria-label", T("蠟燭加齒輪乘以鑰匙，等於多少", "Candle plus gear times key. What is the result?"));
   }
 
   function resetMathUI() {
@@ -755,7 +806,7 @@
     const raw = el.mathInput.value.trim();
     if (!raw) {
       state.attempts[1] += 1;
-      setFeedback(el.mathFeedback, "先寫下一個整數答案，齒輪才會轉動。", "warn");
+      setFeedback(el.mathFeedback, T("先寫下一個整數答案，齒輪才會轉動。", "Write an integer answer first; the gears will not turn otherwise."), "warn");
       shake(el.equationCard);
       el.mathInput.focus();
       playSound("wrong");
@@ -767,7 +818,7 @@
       state.solved[1] = true;
       el.mathInput.disabled = true;
       el.mathSubmit.disabled = true;
-      setFeedback(el.mathFeedback, "齒輪重新咬合。第一道門，開了。", "success");
+      setFeedback(el.mathFeedback, T("齒輪重新咬合。第一道門，開了。", "The gears mesh again. The first gate is open."), "success");
       playSound("success");
       window.setTimeout(() => openPassage(2), 900);
       return;
@@ -789,12 +840,11 @@
 
   function applyRoomPuzzle(room) {
     if (!room) return;
-    const orderNames = room.order.map((spot) => ROOM_NAMES[spot]);
     if (el.roomOrderInline) {
-      el.roomOrderInline.textContent = orderNames.join("、");
+      el.roomOrderInline.textContent = roomOrderText(room.order, EN ? ", " : "、");
     }
     if (el.roomOrderPaper) {
-      el.roomOrderPaper.textContent = orderNames.join("→");
+      el.roomOrderPaper.textContent = roomOrderText(room.order, "→");
     }
     if (el.roomBookNumeral) {
       el.roomBookNumeral.textContent = toRoman(room.book);
@@ -825,11 +875,14 @@
     el.clueRows.forEach((row) => {
       row.classList.remove("is-found");
       const text = $(".clue-text", row);
-      if (text) text.textContent = "尚未調查";
+      if (text) text.textContent = T("尚未調查", "Not yet inspected");
     });
     el.clueCount.textContent = "0 / 4";
     el.notebook.classList.remove("is-complete");
-    el.notebookTip.textContent = "點亮場景中的四個放大鏡。密碼順序，以桌上的紙條為準。";
+    el.notebookTip.textContent = T(
+      "點亮場景中的四個放大鏡。密碼順序，以桌上的紙條為準。",
+      "Click the four magnifiers in the scene. The order is on the desk note."
+    );
     el.codeInputs.forEach((input) => {
       input.value = "";
       input.disabled = false;
@@ -846,8 +899,14 @@
     el.notebook.classList.toggle("is-complete", complete);
 
     if (complete) {
-      el.notebookTip.textContent = "四條線索都齊了。桌上的紙條，是最後一把鑰匙。";
-      showToast("四條線索都齊了。現在，把數字依序排成四位數。", 3800);
+      el.notebookTip.textContent = T(
+        "四條線索都齊了。桌上的紙條，是最後一把鑰匙。",
+        "All four clues are in. The desk note is the last key."
+      );
+      showToast(T(
+        "四條線索都齊了。現在，把數字依序排成四位數。",
+        "All four clues are in. Put the digits in order to form the code."
+      ), 3800);
       playSound("complete");
     }
   }
@@ -948,7 +1007,7 @@
 
     const code = el.codeInputs.map((input) => input.value).join("");
     if (code.length < 4) {
-      setFeedback(el.roomFeedback, "門鎖需要四個數字。再把紙條讀一遍。", "warn");
+      setFeedback(el.roomFeedback, T("門鎖需要四個數字。再把紙條讀一遍。", "The lock needs four digits. Read the note once more."), "warn");
       shake(el.codeInputsWrap);
       const empty = el.codeInputs.find((input) => !input.value);
       if (empty) empty.focus();
@@ -962,7 +1021,7 @@
         input.disabled = true;
       });
       el.roomSubmit.disabled = true;
-      setFeedback(el.roomFeedback, "鎖芯轉到底。門，開了。", "success");
+      setFeedback(el.roomFeedback, T("鎖芯轉到底。門，開了。", "The lock turns all the way. The door is open."), "success");
       playSound("success");
       window.setTimeout(() => openPassage(3), 900);
       return;
@@ -989,7 +1048,7 @@
       button.type = "button";
       button.className = "month-tab";
       button.dataset.month = String(month);
-      button.textContent = `${month}月`;
+      button.textContent = EN ? MONTHS_SHORT_EN[month - 1] : `${month}月`;
       button.setAttribute("aria-pressed", "false");
       el.monthTabs.appendChild(button);
     }
@@ -1010,12 +1069,12 @@
     if (!month) {
       const empty = document.createElement("p");
       empty.className = "day-empty-state";
-      empty.textContent = "先選一個月份";
+      empty.textContent = T("先選一個月份", "Choose a month first");
       el.dayGrid.appendChild(empty);
       return;
     }
 
-    ["日", "一", "二", "三", "四", "五", "六"].forEach((weekday) => {
+    (EN ? WEEKDAYS_EN : ["日", "一", "二", "三", "四", "五", "六"]).forEach((weekday) => {
       const label = document.createElement("span");
       label.className = "day-weekday";
       label.textContent = weekday;
@@ -1039,7 +1098,7 @@
       button.dataset.day = String(day);
       button.textContent = String(day);
       button.setAttribute("aria-pressed", "false");
-      button.setAttribute("aria-label", `${month} 月 ${day} 日`);
+      button.setAttribute("aria-label", EN ? `${MONTHS_EN[month - 1]} ${day}` : `${month} 月 ${day} 日`);
       button.classList.toggle("is-selected", state.date.day === day);
       button.setAttribute("aria-pressed", String(state.date.day === day));
       el.dayGrid.appendChild(button);
@@ -1048,15 +1107,21 @@
 
   function updateDateReadout() {
     const { month, day } = state.date;
-    el.readoutMonth.textContent = month ? String(month) : "—";
+    el.readoutMonth.textContent = month ? (EN ? MONTHS_EN[month - 1] : String(month)) : "—";
     el.readoutDay.textContent = day ? String(day) : "—";
     el.dateReadout.setAttribute(
       "aria-label",
-      month
-        ? day
-          ? `已選擇 ${month} 月 ${day} 日`
-          : `已選擇 ${month} 月，尚未選日期`
-        : "尚未選擇日期"
+      EN
+        ? month
+          ? day
+            ? `Selected ${MONTHS_EN[month - 1]} ${day}`
+            : `Selected ${MONTHS_EN[month - 1]}, no day chosen`
+          : "No date selected"
+        : month
+          ? day
+            ? `已選擇 ${month} 月 ${day} 日`
+            : `已選擇 ${month} 月，尚未選日期`
+          : "尚未選擇日期"
     );
   }
 
@@ -1115,7 +1180,7 @@
 
     const { month, day } = state.date;
     if (!month || !day) {
-      setFeedback(el.dateFeedback, "先在日曆上選出月份和日期。", "warn");
+      setFeedback(el.dateFeedback, T("先在日曆上選出月份和日期。", "Choose a month and a day first."), "warn");
       shake(el.dateForm);
       playSound("wrong");
       return;
@@ -1133,9 +1198,9 @@
       if (el.level3Panel) el.level3Panel.classList.add("is-date-solved");
       if (el.kitchenLaunch) el.kitchenLaunch.hidden = false;
       if (el.kitchenLaunchDate) {
-        el.kitchenLaunchDate.textContent = `${state.birthday.month} 月 ${state.birthday.day} 日`;
+        el.kitchenLaunchDate.textContent = formatDateLabel(state.birthday.month, state.birthday.day);
       }
-      setFeedback(el.dateFeedback, "邀請函上的日期，已經寫好了。", "success");
+      setFeedback(el.dateFeedback, T("邀請函上的日期，已經寫好了。", "The date is written on the invitation."), "success");
       playSound("success");
       window.clearTimeout(state.kitchenOpenTimer);
       state.kitchenOpenTimer = window.setTimeout(openKitchen, 1100);
@@ -1178,22 +1243,22 @@
     if (window.BirthdayKitchen && window.BirthdayKitchen.isOpen()) return;
 
     if (!window.BirthdayKitchen) {
-      setFeedback(el.dateFeedback, "廚房暫時無法載入。日期已找到，正在前往終點。", "warn");
+      setFeedback(el.dateFeedback, T("廚房暫時無法載入。日期已找到，正在前往終點。", "The kitchen could not load. The date is found; moving on to the finale."), "warn");
       window.setTimeout(() => openPassage(null), 600);
       return;
     }
 
-    const dateLabel = `${state.birthday.month} 月 ${state.birthday.day} 日`;
+    const kitchenDate = formatDateLabel(state.birthday.month, state.birthday.day);
     window.BirthdayKitchen.open({
       recipe: cakeRecipeFor(state.birthday),
-      dateLabel,
+      dateLabel: kitchenDate,
       onEvent: handleKitchenEvent,
       onClose: () => {
-        showToast("蛋糕還沒完成。隨時可以回到廚房。", 3200);
+        showToast(T("蛋糕還沒完成。隨時可以回到廚房。", "The cake is not finished yet. Come back to the kitchen any time."), 3200);
       },
       onComplete: () => {
         state.solved[3] = true;
-        setFeedback(el.dateFeedback, "蛋糕完成。第三道門，開了。", "success");
+        setFeedback(el.dateFeedback, T("蛋糕完成。第三道門，開了。", "The cake is finished. The third gate is open."), "success");
         openPassage(null);
       }
     });
@@ -1347,6 +1412,13 @@
 
   function shareText() {
     const formatted = formatTime(state.elapsed);
+    if (EN) {
+      return [
+        "I completed The Three Gates.",
+        `Time ${formatted} · Mistakes ${state.wrong} · Hints ${totalHints()}`,
+        "Three gates. Three riddles. Only the right answer opens the way."
+      ].join("\n");
+    }
     return [
       "我在《三關謎城》通關了。",
       `用時 ${formatted} · 錯誤 ${state.wrong} 次 · 提示 ${totalHints()} 次`,
@@ -1378,7 +1450,7 @@
     try {
       if (navigator.clipboard && window.isSecureContext) {
         await navigator.clipboard.writeText(text);
-        showToast("通關成績已複製。去炫耀一下吧。", 2800);
+        showToast(T("通關成績已複製。去炫耀一下吧。", "Result copied. Go and show it off."), 2800);
         playSound("tap");
         return;
       }
@@ -1387,9 +1459,12 @@
     }
 
     if (fallbackCopy(text)) {
-      showToast("通關成績已複製。去炫耀一下吧。", 2800);
+      showToast(T("通關成績已複製。去炫耀一下吧。", "Result copied. Go and show it off."), 2800);
     } else {
-      showToast("複製失敗。成績是：用時 " + formatTime(state.elapsed) + "。", 4200);
+      showToast(T(
+        "複製失敗。成績是：用時 " + formatTime(state.elapsed) + "。",
+        "Copy failed. Your result: " + formatTime(state.elapsed) + "."
+      ), 4200);
     }
     playSound("tap");
   }

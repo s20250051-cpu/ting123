@@ -3,1024 +3,479 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="theme-color" content="#081014">
-  <meta name="description" content="三關謎城：數學題、密室逃脫、3D 生日廚房。三道門，三種謎，答對才過關。">
-  <title>三關謎城 · 答對才過關</title>
-  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='10' fill='%230b1418'/%3E%3Crect x='5' y='5' width='54' height='54' rx='7' fill='none' stroke='%23d7a85b'/%3E%3Ctext x='32' y='44' text-anchor='middle' font-family='serif' font-size='34' fill='%23e8c489'%3E%E8%AC%8E%3C/text%3E%3C/svg%3E">
-  <link rel="stylesheet" href="styles.css">
+  <meta name="theme-color" content="#080f12">
+  <meta name="description" content="三關謎城：一場約 5–10 分鐘的瀏覽器解謎體驗。數學題、密室逃脫、Three.js 3D 生日廚房。三道門，三種謎，答對才過關。">
+  <meta name="author" content="2B 劉清婷">
+  <title>三關謎城 · 三道門，三種謎｜The Three Gates</title>
+
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="三關謎城 · The Three Gates">
+  <meta property="og:description" content="三關沉浸式網頁解謎：數學、密室、Three.js 3D 生日廚房。答對，門才會開。">
+  <meta property="og:image" content="https://s20250051-cpu.github.io/ting123/assets/og-cover.jpg">
+  <meta property="og:url" content="https://s20250051-cpu.github.io/ting123/">
+  <meta property="og:site_name" content="三關謎城 · The Three Gates">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="三關謎城 · The Three Gates">
+  <meta name="twitter:description" content="A three-act browser puzzle with a real-time Three.js birthday kitchen.">
+  <meta name="twitter:image" content="https://s20250051-cpu.github.io/ting123/assets/og-cover.jpg">
+  <link rel="canonical" href="https://s20250051-cpu.github.io/ting123/">
+  <link rel="alternate" hreflang="zh-Hant" href="https://s20250051-cpu.github.io/ting123/">
+  <link rel="alternate" hreflang="en" href="https://s20250051-cpu.github.io/ting123/?lang=en">
+
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%23081014'/%3E%3Crect x='5' y='5' width='54' height='54' rx='8' fill='none' stroke='%23d7a85b'/%3E%3Ctext x='32' y='45' text-anchor='middle' font-family='serif' font-size='34' fill='%23e8c489'%3E%E8%AC%8E%3C/text%3E%3C/svg%3E">
+  <link rel="stylesheet" href="site.css">
+  <script>document.documentElement.classList.add('js');</script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "VideoGame",
+    "name": "三關謎城 / The Three Gates",
+    "alternativeName": "The Three Gates",
+    "description": "A three-act browser puzzle: mathematics, escape room and a real-time Three.js birthday kitchen. Only correct answers open the gates.",
+    "genre": ["Puzzle", "Escape room", "Educational game"],
+    "gamePlatform": "Web browser",
+    "applicationCategory": "Game",
+    "operatingSystem": "Any",
+    "isAccessibleForFree": true,
+    "inLanguage": ["zh-Hant", "en"],
+    "author": {
+      "@type": "Person",
+      "name": "2B 劉清婷"
+    },
+    "publisher": {
+      "@type": "Person",
+      "name": "2B 劉清婷"
+    },
+    "url": "https://s20250051-cpu.github.io/ting123/",
+    "image": "https://s20250051-cpu.github.io/ting123/assets/og-cover.jpg"
+  }
+  </script>
 </head>
 <body>
+  <a class="skip-link" href="#main" data-en="Skip to content">跳到主要內容</a>
+  <div class="site-grain" aria-hidden="true"></div>
+
   <svg class="svg-sprite" aria-hidden="true" focusable="false" width="0" height="0">
     <defs>
-      <symbol id="i-gear" viewBox="0 0 24 24">
-        <path d="M9.9 2.8h4.2l.5 2.1 1.4.6 1.8-1.2 3 3-1.2 1.8.6 1.4 2.1.5v4.2l-2.1.5-.6 1.4 1.2 1.8-3 3-1.8-1.2-1.4.6-.5 2.1H9.9l-.5-2.1-1.4-.6-1.8 1.2-3-3 1.2-1.8-.6-1.4L1.7 15V9.9l2.1-.5.6-1.4-1.2-1.8 3-3 1.8 1.2 1.4-.6.5-2.1Z"/>
-        <circle cx="12" cy="12" r="3.5"/>
-      </symbol>
-      <symbol id="i-key" viewBox="0 0 24 24">
-        <circle cx="7.6" cy="12" r="4.1"/>
-        <path d="M11.7 12H21M17.2 12v4.2M20.4 12v3"/>
-      </symbol>
-      <symbol id="i-candle" viewBox="0 0 24 24">
-        <path d="M8.4 10.7h7.2V21H8.4zM8.4 14.3h7.2"/>
-        <path d="M12 3.1c1.5 2.1 2.7 3 2.7 4.8a2.7 2.7 0 1 1-5.4 0c0-1.1.7-2.1 1.6-3.2.4-.5.8-1 1.1-1.6Z"/>
-      </symbol>
-      <symbol id="i-book" viewBox="0 0 24 24">
-        <path d="M4 5.6A2.6 2.6 0 0 1 6.6 3H20v18H6.6A2.6 2.6 0 0 1 4 18.4z"/>
-        <path d="M4 18.4A2.6 2.6 0 0 1 6.6 15.8H20M8.5 7.3h7"/>
-      </symbol>
-      <symbol id="i-frame" viewBox="0 0 24 24">
-        <rect x="3.5" y="4.5" width="17" height="15" rx=".7"/>
-        <rect x="6" y="7" width="12" height="10" rx=".3"/>
-        <path d="m7 16 3.5-4.4 2.4 2.8 2.1-2.5L18 16"/>
-      </symbol>
-      <symbol id="i-clock" viewBox="0 0 24 24">
-        <circle cx="12" cy="12" r="8.6"/>
-        <path d="M12 7.1V12l3.2 2"/>
-      </symbol>
-      <symbol id="i-drawer" viewBox="0 0 24 24">
-        <rect x="3.5" y="6.5" width="17" height="13" rx="1"/>
-        <path d="M3.5 11.2h17M9 14.7h6"/>
-      </symbol>
-      <symbol id="i-search" viewBox="0 0 24 24">
-        <circle cx="10.4" cy="10.4" r="6.4"/>
-        <path d="m15.2 15.2 5.1 5.1"/>
-      </symbol>
-      <symbol id="i-check" viewBox="0 0 24 24">
-        <path d="m4.2 12.2 5 5L20 6.8"/>
-      </symbol>
-      <symbol id="i-lock" viewBox="0 0 24 24">
-        <rect x="4.8" y="10" width="14.4" height="10.2" rx="2"/>
-        <path d="M8 10V7.3a4 4 0 0 1 8 0V10M12 14.2v2.2"/>
-      </symbol>
-      <symbol id="i-volume" viewBox="0 0 24 24">
-        <path d="M4 9.2h3.4L12 5.3v13.4l-4.6-3.9H4z"/>
-        <path d="M15.5 8.6a5 5 0 0 1 0 6.8M18.4 6.2a8.7 8.7 0 0 1 0 11.6"/>
-      </symbol>
-      <symbol id="i-volume-off" viewBox="0 0 24 24">
-        <path d="M4 9.2h3.4L12 5.3v13.4l-4.6-3.9H4z"/>
-        <path d="m16 9.4 5 5M21 9.4l-5 5"/>
-      </symbol>
-      <symbol id="i-arrow" viewBox="0 0 24 24">
-        <path d="M3.5 12h16.7M14.4 6.2 20.2 12l-5.8 5.8"/>
-      </symbol>
-      <symbol id="i-restart" viewBox="0 0 24 24">
-        <path d="M4.2 9.1A8.2 8.2 0 1 1 4 14.8M4.2 4.2v5.3h5.3"/>
-      </symbol>
-      <symbol id="i-share" viewBox="0 0 24 24">
-        <circle cx="6" cy="12" r="2.6"/><circle cx="18" cy="5.8" r="2.6"/><circle cx="18" cy="18.2" r="2.6"/>
-        <path d="m8.4 10.8 7.2-3.7M8.4 13.2l7.2 3.7"/>
-      </symbol>
-      <symbol id="i-sparkle" viewBox="0 0 24 24">
-        <path d="M12 2.5c.5 5.4 3.1 8 8.5 8.5-5.4.5-8 3.1-8.5 8.5-.5-5.4-3.1-8-8.5-8.5 5.4-.5 8-3.1 8.5-8.5Z"/>
-      </symbol>
-      <symbol id="i-calendar" viewBox="0 0 24 24">
-        <rect x="3.5" y="5.5" width="17" height="15" rx="1.4"/>
-        <path d="M3.5 10h17M8 3v5M16 3v5"/>
-      </symbol>
-      <symbol id="i-quote" viewBox="0 0 24 24">
-        <path d="M3.6 13.8c0-4 2.2-7 6.4-8.8M13.2 13.8c0-4 2.2-7 6.4-8.8M3.6 13.8h4.2v6.6H3.6zM13.2 13.8h4.2v6.6h-4.2z"/>
-      </symbol>
-      <symbol id="i-close" viewBox="0 0 24 24">
-        <path d="m5.5 5.5 13 13M18.5 5.5l-13 13"/>
-      </symbol>
-      <symbol id="i-cake" viewBox="0 0 24 24">
-        <path d="M3.8 20.2h16.4M5.2 20.2v-5.1c0-1.2 1-2.1 2.1-2.1h9.4c1.2 0 2.1.9 2.1 2.1v5.1"/>
-        <path d="M5.2 16.1c1.4.9 2.7.9 4.1 0 1.4-.9 2.8-.9 4.2 0 1.3.9 2.6.9 4 .1M12 12.8V7.2M12 7.2c1.3-1.4 2.6-.5 2.6.8 0 1.2-1.2 1.9-2.6 2.4-1.4-.5-2.6-1.2-2.6-2.4 0-1.3 1.3-2.2 2.6-.8Z"/>
-      </symbol>
+      <symbol id="s-arrow" viewBox="0 0 24 24"><path d="M3.5 12h16.7M14.4 6.2 20.2 12l-5.8 5.8"/></symbol>
+      <symbol id="s-play" viewBox="0 0 24 24"><path d="M8 5.2 19 12 8 18.8Z"/></symbol>
+      <symbol id="s-sparkle" viewBox="0 0 24 24"><path d="M12 2.5c.5 5.4 3.1 8 8.5 8.5-5.4.5-8 3.1-8.5 8.5-.5-5.4-3.1-8-8.5-8.5 5.4-.5 8-3.1 8.5-8.5Z"/></symbol>
+      <symbol id="s-check" viewBox="0 0 24 24"><path d="m4.2 12.2 5 5L20 6.8"/></symbol>
+      <symbol id="s-cube" viewBox="0 0 24 24"><path d="m12 2.8 8 4.5v9.4l-8 4.5-8-4.5V7.3zM4 7.3l8 4.6 8-4.6M12 11.9V21"/></symbol>
+      <symbol id="s-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.8"/><path d="M12 7v5.2l3.4 2"/></symbol>
+      <symbol id="s-book" viewBox="0 0 24 24"><path d="M4 5.6A2.6 2.6 0 0 1 6.6 3H20v18H6.6A2.6 2.6 0 0 1 4 18.4zM4 18.4A2.6 2.6 0 0 1 6.6 15.8H20"/></symbol>
+      <symbol id="s-cake" viewBox="0 0 24 24"><path d="M3.8 20.2h16.4M5.2 20.2v-5.1c0-1.2 1-2.1 2.1-2.1h9.4c1.2 0 2.1.9 2.1 2.1v5.1M5.2 16.1c1.4.9 2.7.9 4.1 0 1.4-.9 2.8-.9 4.2 0 1.3.9 2.6.9 4 .1M12 12.8V7.2M12 7.2c1.3-1.4 2.6-.5 2.6.8 0 1.2-1.2 1.9-2.6 2.4-1.4-.5-2.6-1.2-2.6-2.4 0-1.3 1.3-2.2 2.6-.8Z"/></symbol>
+      <symbol id="s-lock" viewBox="0 0 24 24"><rect x="4.8" y="10" width="14.4" height="10.2" rx="2"/><path d="M8 10V7.3a4 4 0 0 1 8 0V10M12 14.2v2.2"/></symbol>
+      <symbol id="s-globe" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.8"/><path d="M3.4 12h17.2M12 3.2c2.4 2.4 3.6 5.4 3.6 8.8s-1.2 6.4-3.6 8.8c-2.4-2.4-3.6-5.4-3.6-8.8S9.6 5.6 12 3.2Z"/></symbol>
+      <symbol id="s-menu" viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16"/></symbol>
+      <symbol id="s-close" viewBox="0 0 24 24"><path d="m5.5 5.5 13 13M18.5 5.5l-13 13"/></symbol>
+      <symbol id="s-github" viewBox="0 0 24 24"><path d="M12 2.8a9.2 9.2 0 0 0-2.9 17.9c.5.1.6-.2.6-.5v-1.8c-2.6.5-3.1-1.1-3.1-1.1-.4-1-1-1.3-1-1.3-.8-.6.1-.6.1-.6.9.1 1.5 1 1.5 1 .8 1.4 2.2 1 2.7.8.1-.6.3-1 .6-1.2-2.1-.2-4.3-1-4.3-4.5 0-1 .3-1.8 1-2.5-.1-.2-.4-1.2.1-2.5 0 0 .8-.2 2.5 1a8.7 8.7 0 0 1 4.6 0c1.8-1.2 2.5-1 2.5-1 .5 1.3.2 2.3.1 2.5.6.7 1 1.5 1 2.5 0 3.5-2.2 4.3-4.3 4.5.3.3.6.9.6 1.8v2.6c0 .3.2.6.7.5A9.2 9.2 0 0 0 12 2.8Z"/></symbol>
+      <symbol id="s-key" viewBox="0 0 24 24"><circle cx="7.6" cy="12" r="4.1"/><path d="M11.7 12H21M17.2 12v4.2M20.4 12v3"/></symbol>
+      <symbol id="s-chevron" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></symbol>
     </defs>
   </svg>
 
-  <div class="page-noise" aria-hidden="true"></div>
-  <div class="page-glow" aria-hidden="true"></div>
-
-  <header class="topbar">
-    <button class="brand" id="brand-btn" type="button">
-      <span class="brand-seal" aria-hidden="true">謎</span>
-      <span class="brand-word">
-        <span class="brand-cn">三關謎城</span>
-        <span class="brand-en">THE THREE GATES</span>
+  <header class="site-header" id="site-header">
+    <a class="site-brand" href="#top" aria-label="三關謎城 · The Three Gates">
+      <span class="site-seal" aria-hidden="true">謎</span>
+      <span class="site-brand-text">
+        <strong>三關謎城</strong>
+        <small>THE THREE GATES</small>
       </span>
-      <span class="sr-only">回到城門</span>
-    </button>
-    <div class="topbar-actions">
-      <span class="topbar-note" id="topbar-note">一場合乎好奇心的夜遊</span>
-      <button class="icon-btn" id="sound-btn" type="button" aria-pressed="true" aria-label="關閉音效" title="關閉音效">
-        <svg class="icon icon--volume"><use href="#i-volume"></use></svg>
-        <svg class="icon icon--muted"><use href="#i-volume-off"></use></svg>
-      </button>
-      <button class="text-btn" id="restart-btn" type="button" aria-label="重新開始" title="重新開始" hidden>
-        <svg class="icon"><use href="#i-restart"></use></svg>
-        <span>重新開始</span>
+    </a>
+
+    <nav class="site-nav" id="site-nav" aria-label="Main navigation / 主要導覽">
+      <a href="#experience" data-en="Experience">體驗</a>
+      <a href="#chapters" data-en="Chapters">關卡</a>
+      <a href="#kitchen" data-en="3D Kitchen">3D 廚房</a>
+      <a href="#creator" data-en="Creator">創作理念</a>
+      <a href="#faq" data-en="FAQ">常見問題</a>
+      <a class="nav-play" href="play.html?lang=zh-Hant" data-play-link data-en="Play now">立即遊玩</a>
+    </nav>
+
+    <div class="site-actions">
+      <div class="lang-switch" role="group" aria-label="Language / 語言">
+        <button type="button" data-lang="zh" aria-pressed="true">中</button>
+        <button type="button" data-lang="en" aria-pressed="false">EN</button>
+      </div>
+      <a class="btn btn-play" href="play.html?lang=zh-Hant" data-play-link>
+        <span data-en="Play now">立即遊玩</span>
+        <svg class="icon"><use href="#s-play"></use></svg>
+      </a>
+      <button class="nav-toggle" id="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav" aria-label="開啟選單 / Open menu">
+        <svg class="icon icon-menu"><use href="#s-menu"></use></svg>
+        <svg class="icon icon-close"><use href="#s-close"></use></svg>
       </button>
     </div>
   </header>
 
-  <main class="app" id="app">
-    <!-- ───────────────────────────── 城門 ───────────────────────────── -->
-    <section class="screen screen--landing" id="screen-landing">
-      <div class="landing-copy">
-        <p class="kicker"><span class="kicker-line" aria-hidden="true"></span>三關解謎 · 答對才過關</p>
+  <main id="main">
+    <section class="hero" id="top">
+      <div class="hero-copy">
+        <p class="eyebrow eyebrow--hero"><span class="rule"></span><span data-en="A THREE-ACT PUZZLE EXPERIENCE">三關沉浸式解謎 · 網頁即玩</span></p>
         <h1 class="hero-title">
           <span class="hero-title-cn">三關<span class="hero-title-accent">謎城</span></span>
-          <span class="hero-title-en" aria-hidden="true">THE THREE GATES</span>
+          <span class="hero-title-en">THE THREE GATES</span>
         </h1>
-        <p class="hero-lede">
-          三道門，三種謎。<br>
-          走進鐘樓、無聲書房，與一場沒有日期的生日。<br>
-          <em>答對，門才會開。</em>
-        </p>
+        <p class="hero-lede" data-en-html="Three gates. Three riddles.<br><em>Only the right answer opens the way.</em>">三道門，三種謎。<br><em>答對，門才會開。</em></p>
+        <p class="hero-body" data-en="A five-to-ten-minute puzzle experience in your browser: a stopped clock tower, a locked study, and a real-time Three.js birthday kitchen where you bake your way through the last gate.">一場約五到十分鐘的瀏覽器解謎體驗：走進停擺的鐘樓、上鎖的書房，最後在 Three.js 即時烘焙的生日廚房裡，親手完成第三道門。</p>
         <div class="hero-actions">
-          <button class="btn btn--primary btn--large" id="start-btn" type="button">
-            <span>推開第一道門</span>
-            <svg class="icon"><use href="#i-arrow"></use></svg>
-          </button>
-          <div class="hero-meta">
-            <span>3 道關卡 · 每局重新出題</span>
-            <span id="best-record">尚未留下通關紀錄</span>
+          <a class="btn btn-primary btn-large" href="play.html?lang=zh-Hant" data-play-link>
+            <span data-en="Play now">立即遊玩</span>
+            <svg class="icon"><use href="#s-arrow"></use></svg>
+          </a>
+          <a class="btn btn-quiet" href="#chapters">
+            <span data-en="Explore the gates">探索三道門</span>
+            <svg class="icon"><use href="#s-chevron"></use></svg>
+          </a>
+        </div>
+        <ul class="hero-stats" aria-label="Product facts / 產品資訊">
+          <li><strong>03</strong><span data-en="Chapters">關卡</span></li>
+          <li><strong>5–10</strong><span data-en="Minutes">分鐘</span></li>
+          <li><strong>3D</strong><span data-en="Finale">壓軸</span></li>
+          <li><strong>Free</strong><span data-en="To play">遊玩</span></li>
+        </ul>
+      </div>
+
+      <div class="hero-art" aria-label="Game preview / 遊戲預覽">
+        <div class="hero-orbit" aria-hidden="true"></div>
+        <figure class="product-frame">
+          <div class="product-bar">
+            <span class="product-dots" aria-hidden="true"><i></i><i></i><i></i></span>
+            <span class="product-url">three-gates.app / final-gate</span>
+            <span class="product-live"><i></i> LIVE 3D</span>
           </div>
-        </div>
-        <ol class="level-chips" aria-label="三道關卡">
-          <li><span class="chip-numeral">I</span><span>數學題</span><small>齒輪鐘樓</small></li>
-          <li><span class="chip-numeral">II</span><span>密室逃脫</span><small>無聲書房</small></li>
-          <li><span class="chip-numeral">III</span><span>生日謎題</span><small>3D 生日廚房</small></li>
-        </ol>
+          <div class="product-image">
+            <img src="assets/kitchen.jpg" alt="Three.js 3D 生日廚房與完成的生日蛋糕" data-en-alt="The Three.js 3D birthday kitchen with a finished birthday cake">
+            <span class="product-stamp">III</span>
+            <span class="product-tag">THREE.JS · WEBGL</span>
+          </div>
+        </figure>
+        <figure class="floating-shot">
+          <img src="assets/chapter-room.jpg" alt="密室逃脫關卡：月光下的無聲書房" data-en-alt="The Silent Study escape-room scene under moonlight">
+          <figcaption><span>CHAPTER II</span><strong data-en="The Silent Study">無聲書房</strong></figcaption>
+        </figure>
+        <div class="hero-seal" aria-hidden="true"><span data-en="RIGHT">答對</span><span data-en="ANSWER">才過關</span></div>
+        <div class="hero-caption"><span class="hero-caption-line"></span><span data-en="An original browser puzzle, made for one more curious night.">一場為好奇心而作的網頁解謎。</span></div>
       </div>
 
-      <div class="gateway" aria-hidden="true">
-        <div class="gateway-halo"></div>
-        <div class="gate gateway--1">
-          <span class="gate-arch"></span>
-          <span class="gate-numeral">I</span>
-          <span class="gate-keyhole"></span>
-          <span class="gate-label">MATHEMATICS</span>
-        </div>
-        <div class="gate gateway--2">
-          <span class="gate-arch"></span>
-          <span class="gate-numeral">II</span>
-          <span class="gate-keyhole"></span>
-          <span class="gate-label">ESCAPE</span>
-          <span class="gate-light"></span>
-        </div>
-        <div class="gate gateway--3">
-          <span class="gate-arch"></span>
-          <span class="gate-numeral">III</span>
-          <span class="gate-keyhole"></span>
-          <span class="gate-label">BIRTHDAY</span>
-        </div>
-        <span class="floating-glyph floating-glyph--a">×</span>
-        <span class="floating-glyph floating-glyph--b">?</span>
-        <span class="gateway-shadow"></span>
-      </div>
-
-      <footer class="landing-footer">
-        <span>謎城開放時間 · 任何你想動腦的時刻</span>
-        <span class="footer-dot" aria-hidden="true"></span>
-        <span>耳機效果更佳</span>
-      </footer>
+      <a class="scroll-cue" href="#experience" aria-label="Scroll to experience / 向下瀏覽">
+        <span data-en="Scroll">向下</span><i aria-hidden="true"></i>
+      </a>
     </section>
 
-    <!-- ───────────────────────────── 遊戲 ───────────────────────────── -->
-    <section class="screen screen--game" id="screen-game" data-level="1" hidden>
-      <div class="gamebar">
-        <ol class="stepper" id="stepper" aria-label="通關進度">
-          <li class="step is-current" data-step="1" aria-current="step">
-            <span class="step-dot">I</span>
-            <span class="step-text"><b>數學題</b><small>齒輪鐘樓</small></span>
-          </li>
-          <li class="step" data-step="2">
-            <span class="step-dot">II</span>
-            <span class="step-text"><b>密室逃脫</b><small>無聲書房</small></span>
-          </li>
-          <li class="step" data-step="3">
-            <span class="step-dot">III</span>
-            <span class="step-text"><b>生日謎題</b><small>缺席的日期</small></span>
-          </li>
-        </ol>
-        <div class="game-meta">
-          <span class="game-clock"><span>用時</span><time id="timer" datetime="PT0S">00:00</time></span>
-          <span class="game-lock"><svg class="icon"><use href="#i-lock"></use></svg><span id="lock-count">1 / 3</span></span>
-        </div>
+    <section class="proof" aria-label="At a glance / 產品一覽">
+      <div class="proof-inner">
+        <span><svg class="icon"><use href="#s-play"></use></svg><span data-en="Instant play">即開即玩</span></span>
+        <span><svg class="icon"><use href="#s-sparkle"></use></svg><span data-en="Fresh every run">每局重新出題</span></span>
+        <span><svg class="icon"><use href="#s-cube"></use></svg><span data-en="Real-time 3D">即時 3D</span></span>
+        <span><svg class="icon"><use href="#s-globe"></use></svg><span>中文 / English</span></span>
+        <span><svg class="icon"><use href="#s-clock"></use></svg><span data-en="5–10 minutes">5–10 分鐘</span></span>
       </div>
-
-      <!-- 第一關 -->
-      <article class="level level--math" id="level-1">
-        <div class="level-scene scene--math">
-          <div class="scene-frame">
-            <svg class="scene-svg" viewBox="0 0 900 700" role="img" aria-label="深夜的鐘樓，巨大的齒輪與停擺的鐘面在月光下泛著銅光">
-              <defs>
-                <linearGradient id="towerWall" x1="0" y1="0" x2="0.8" y2="1">
-                  <stop offset="0" stop-color="#0c181d"/>
-                  <stop offset="0.6" stop-color="#101e24"/>
-                  <stop offset="1" stop-color="#070d10"/>
-                </linearGradient>
-                <radialGradient id="towerMoon" cx=".5" cy=".5" r=".5">
-                  <stop offset="0" stop-color="#f4e7c3" stop-opacity=".95"/>
-                  <stop offset=".45" stop-color="#cfbd94" stop-opacity=".7"/>
-                  <stop offset="1" stop-color="#9b8b68" stop-opacity="0"/>
-                </radialGradient>
-                <linearGradient id="towerBrass" x1="0" y1="0" x2="1" y2="1">
-                  <stop offset="0" stop-color="#f4d79d"/>
-                  <stop offset=".45" stop-color="#c99a52"/>
-                  <stop offset="1" stop-color="#77522a"/>
-                </linearGradient>
-                <radialGradient id="towerGlow" cx=".5" cy=".5" r=".5">
-                  <stop offset="0" stop-color="#e7c582" stop-opacity=".3"/>
-                  <stop offset="1" stop-color="#e7c582" stop-opacity="0"/>
-                </radialGradient>
-                <clipPath id="towerWindowClip">
-                  <path d="M115 470V238a173 173 0 0 1 346 0v232Z"/>
-                </clipPath>
-                <filter id="towerBlur" x="-50%" y="-50%" width="200%" height="200%">
-                  <feGaussianBlur stdDeviation="12"/>
-                </filter>
-              </defs>
-              <rect width="900" height="700" fill="url(#towerWall)"/>
-              <g opacity=".2" stroke="#d8b273" stroke-width="1" fill="none">
-                <path d="M0 74h900M0 620h900M84 0v700M816 0v700"/>
-                <path d="M0 700 205 470M900 700 695 470" opacity=".5"/>
-              </g>
-              <rect x="0" y="610" width="900" height="90" fill="#060b0e"/>
-              <path d="M0 610h900" stroke="#a98046" stroke-opacity=".3"/>
-
-              <g clip-path="url(#towerWindowClip)">
-                <rect x="100" y="50" width="380" height="430" fill="#07151d"/>
-                <circle cx="286" cy="236" r="132" fill="url(#towerMoon)" opacity=".62"/>
-                <circle cx="286" cy="236" r="47" fill="#f4e9ce" opacity=".87"/>
-                <circle cx="303" cy="221" r="9" fill="#d8cbb0" opacity=".55"/>
-                <circle cx="270" cy="250" r="6" fill="#d8cbb0" opacity=".4"/>
-                <g fill="#f4e9ce">
-                  <circle cx="165" cy="155" r="1.6" opacity=".8"/><circle cx="190" cy="310" r="1.2" opacity=".55"/>
-                  <circle cx="367" cy="168" r="1.8" opacity=".75"/><circle cx="412" cy="272" r="1.3" opacity=".5"/>
-                  <circle cx="143" cy="395" r="1.1" opacity=".6"/><circle cx="358" cy="382" r="1.5" opacity=".45"/>
-                  <circle cx="240" cy="111" r="1.2" opacity=".6"/><circle cx="426" cy="118" r="1" opacity=".5"/>
-                </g>
-                <g stroke="#7e673f" stroke-width="3" opacity=".65">
-                  <path d="M288 65v405M125 238h327"/>
-                  <path d="M164 144a170 170 0 0 1 248 0" fill="none"/>
-                </g>
-                <path d="M115 470h346" stroke="#b58a4d" stroke-width="5" opacity=".4"/>
-              </g>
-              <path d="M104 480V238a184 184 0 0 1 368 0v242" fill="none" stroke="#8d6a3a" stroke-width="2" opacity=".7"/>
-              <path d="M126 480V242a162 162 0 0 1 324 0v238" fill="none" stroke="#5a452a" stroke-width="2"/>
-
-              <g opacity=".9">
-                <g fill="none" stroke="url(#towerBrass)" stroke-width="3">
-                  <circle cx="736" cy="490" r="152" stroke-width="28" stroke-dasharray="22 18" opacity=".34"/>
-                  <circle cx="736" cy="490" r="117" stroke-width="2" opacity=".55"/>
-                  <circle cx="736" cy="490" r="38" stroke-width="2" opacity=".7"/>
-                  <path d="M736 373v-34M736 607v34M619 490h-34M853 490h34M653 407l-24-24M819 573l24 24M819 407l24-24M653 573l-24 24" opacity=".5"/>
-                  <animateTransform attributeName="transform" type="rotate" from="0 736 490" to="360 736 490" dur="80s" repeatCount="indefinite"/>
-                </g>
-                <g fill="none" stroke="url(#towerBrass)" stroke-width="2.4" opacity=".45">
-                  <circle cx="840" cy="300" r="86" stroke-width="20" stroke-dasharray="16 15"/>
-                  <circle cx="840" cy="300" r="62"/>
-                  <circle cx="840" cy="300" r="22"/>
-                  <animateTransform attributeName="transform" type="rotate" from="360 840 300" to="0 840 300" dur="55s" repeatCount="indefinite"/>
-                </g>
-              </g>
-
-              <g>
-                <circle cx="560" cy="292" r="183" fill="#0a1418" stroke="#74552f" stroke-width="3"/>
-                <circle cx="560" cy="292" r="166" fill="#101b20" stroke="url(#towerBrass)" stroke-width="3"/>
-                <circle cx="560" cy="292" r="145" fill="none" stroke="#b98e51" stroke-width="1" opacity=".5"/>
-                <circle cx="560" cy="292" r="176" fill="none" stroke="#d8b273" stroke-width="9" stroke-dasharray="2 26" opacity=".55"/>
-                <g fill="#d9bd8b" font-family="Georgia, serif" font-size="23" text-anchor="middle" opacity=".8">
-                  <text x="560" y="174">XII</text>
-                  <text x="684" y="300">III</text>
-                  <text x="560" y="421">VI</text>
-                  <text x="436" y="300">IX</text>
-                </g>
-                <g stroke="#d3ad72" stroke-width="2" opacity=".35">
-                  <path d="M560 292V210M560 292l58 39M560 292l-66 24"/>
-                </g>
-                <circle cx="560" cy="292" r="9" fill="#d3ad72"/>
-                <text x="560" y="315" text-anchor="middle" fill="#e7c98f" font-family="Georgia, 'Songti TC', serif" font-size="66" opacity=".85">?</text>
-                <path d="M480 360c35 18 70 20 113 4" fill="none" stroke="#e7c98f" stroke-width="1" stroke-dasharray="4 8" opacity=".5"/>
-              </g>
-
-              <g opacity=".75">
-                <path d="M560 420v120" stroke="#b68c53" stroke-width="4"/>
-                <circle cx="560" cy="550" r="27" fill="#c69a5a" opacity=".65"/>
-                <circle cx="560" cy="550" r="38" fill="none" stroke="#c69a5a" opacity=".25"/>
-                <animateTransform attributeName="transform" type="rotate" values="-4 560 420;4 560 420;-4 560 420" dur="5.5s" repeatCount="indefinite"/>
-              </g>
-
-              <ellipse cx="560" cy="615" rx="330" ry="40" fill="url(#towerGlow)"/>
-              <g fill="#f1d9a7" opacity=".6" class="dust-motes">
-                <circle cx="198" cy="515" r="1.5"/><circle cx="330" cy="455" r="1"/><circle cx="478" cy="540" r="1.3"/>
-                <circle cx="700" cy="172" r="1"/><circle cx="812" cy="600" r="1.4"/><circle cx="642" cy="615" r="1"/>
-                <circle cx="390" cy="610" r=".9"/><circle cx="92" cy="360" r="1.2"/>
-              </g>
-              <text x="58" y="666" fill="#b28b54" font-family="Georgia, serif" font-size="12" letter-spacing="5" opacity=".65">TEMPUS · GATE I</text>
-              <text x="842" y="666" fill="#b28b54" font-family="Georgia, serif" font-size="12" letter-spacing="4" opacity=".4" text-anchor="end">MMXXVI</text>
-            </svg>
-            <div class="scene-corner scene-corner--tl" aria-hidden="true"></div>
-            <div class="scene-corner scene-corner--br" aria-hidden="true"></div>
-            <div class="scene-caption">
-              <span class="scene-caption-kicker">第一關 · 數學題</span>
-              <strong>鐘樓的齒輪室</strong>
-              <span>月光之下，時間停了下來。</span>
-            </div>
-          </div>
-        </div>
-
-        <div class="level-panel">
-          <div class="panel-heading">
-            <p class="eyebrow">LEVEL I / MATHEMATICS</p>
-            <h2 id="level-1-title" tabindex="-1">齒輪鐘樓</h2>
-            <p class="story">鐘塔停了。三個符號各自代表一個正整數，齒輪咬合著最後一道算式。<br>解開它，門鎖才會轉動。</p>
-          </div>
-
-          <div class="equation-card" id="equation-card">
-            <div class="glyph-legend" aria-hidden="true">
-              <span><svg class="icon"><use href="#i-gear"></use></svg>齒輪</span>
-              <span><svg class="icon"><use href="#i-key"></use></svg>鑰匙</span>
-              <span><svg class="icon"><use href="#i-candle"></use></svg>蠟燭</span>
-            </div>
-            <div class="equations" id="equations" aria-live="off"></div>
-            <div class="equation-target">
-              <span class="target-label">求</span>
-              <span id="target-expression" role="group" aria-label="蠟燭加齒輪乘以鑰匙"></span>
-              <span class="target-equals">=</span>
-              <span class="target-unknown">?</span>
-            </div>
-          </div>
-
-          <form class="answer-form" id="math-form" novalidate>
-            <label for="math-answer">寫下你的答案</label>
-            <div class="answer-row">
-              <input class="answer-input" id="math-answer" name="answer" type="text" inputmode="numeric" pattern="[0-9]*" autocomplete="off" placeholder="？" aria-describedby="math-feedback">
-              <button class="btn btn--submit" type="submit">
-                <span>解鎖齒輪</span>
-                <svg class="icon"><use href="#i-arrow"></use></svg>
-              </button>
-            </div>
-            <p class="form-note">同一符號代表同一個數字；答案為整數。</p>
-          </form>
-
-          <p class="feedback" id="math-feedback" aria-live="polite"></p>
-
-          <div class="hint-block" data-hint-level="1">
-            <button class="hint-toggle" type="button" aria-expanded="false" aria-controls="math-hints">
-              <span><svg class="icon"><use href="#i-sparkle"></use></svg>需要一點提示？</span>
-              <span class="hint-count">0 / 2</span>
-            </button>
-            <div class="hint-drawer" id="math-hints" hidden></div>
-          </div>
-        </div>
-      </article>
-
-      <!-- 第二關 -->
-      <article class="level level--room" id="level-2" hidden>
-        <div class="level-scene scene--room">
-          <div class="scene-frame">
-            <div class="room-wrap" id="room-wrap">
-              <svg class="scene-svg room-svg" viewBox="0 0 900 700" role="img" aria-label="一間上鎖的舊書房：左邊是窗，中間是書架，右邊掛著畫與一座鐘，下方是書桌和抽屜">
-                <defs>
-                  <linearGradient id="roomWall" x1="0" y1="0" x2="1" y2="1">
-                    <stop offset="0" stop-color="#203238"/>
-                    <stop offset=".55" stop-color="#16262c"/>
-                    <stop offset="1" stop-color="#0d181c"/>
-                  </linearGradient>
-                  <linearGradient id="roomFloor" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="0" stop-color="#2b2119"/>
-                    <stop offset="1" stop-color="#120e0b"/>
-                  </linearGradient>
-                  <linearGradient id="roomWood" x1="0" y1="0" x2="1" y2="1">
-                    <stop offset="0" stop-color="#6b4a2e"/>
-                    <stop offset=".5" stop-color="#4a3220"/>
-                    <stop offset="1" stop-color="#2c1e14"/>
-                  </linearGradient>
-                  <linearGradient id="roomGold" x1="0" y1="0" x2="1" y2="1">
-                    <stop offset="0" stop-color="#f0d39a"/>
-                    <stop offset=".5" stop-color="#c89a56"/>
-                    <stop offset="1" stop-color="#7b562c"/>
-                  </linearGradient>
-                  <radialGradient id="lampGlow" cx=".5" cy=".5" r=".5">
-                    <stop offset="0" stop-color="#f3c983" stop-opacity=".52"/>
-                    <stop offset=".55" stop-color="#d7a057" stop-opacity=".14"/>
-                    <stop offset="1" stop-color="#d7a057" stop-opacity="0"/>
-                  </radialGradient>
-                  <radialGradient id="roomMoon" cx=".5" cy=".5" r=".5">
-                    <stop offset="0" stop-color="#f1e7cc" stop-opacity=".9"/>
-                    <stop offset="1" stop-color="#bfb18e" stop-opacity="0"/>
-                  </radialGradient>
-                  <clipPath id="roomWindowClip">
-                    <path d="M54 362V182a112 112 0 0 1 224 0v180Z"/>
-                  </clipPath>
-                  <linearGradient id="lightShaft" x1="0" y1="0" x2="1" y2="1">
-                    <stop offset="0" stop-color="#e8d7ae" stop-opacity=".18"/>
-                    <stop offset="1" stop-color="#e8d7ae" stop-opacity="0"/>
-                  </linearGradient>
-                </defs>
-
-                <rect width="900" height="700" fill="url(#roomWall)"/>
-                <g opacity=".18" stroke="#d6bd91" stroke-width="1" fill="none">
-                  <path d="M0 88h900M0 190h900M0 292h900M0 394h900"/>
-                  <path d="M30 0v520M870 0v520"/>
-                </g>
-                <rect x="0" y="470" width="900" height="230" fill="url(#roomFloor)"/>
-                <path d="M0 470h900" stroke="#0a1114" stroke-width="18"/>
-                <g stroke="#4b3524" stroke-width="1" opacity=".5">
-                  <path d="M0 610 900 500M0 700 900 610M120 700 900 560M260 700 900 555M420 700 900 585M600 700 900 640"/>
-                </g>
-                <ellipse cx="450" cy="615" rx="370" ry="70" fill="#170f0b" opacity=".6"/>
-
-                <!-- window -->
-                <g>
-                  <path d="M36 375V182a129 129 0 0 1 258 0v193Z" fill="#0a151a" stroke="#4a3927" stroke-width="10"/>
-                  <g clip-path="url(#roomWindowClip)">
-                    <rect x="42" y="50" width="250" height="330" fill="#0a1921"/>
-                    <circle cx="132" cy="196" r="90" fill="url(#roomMoon)"/>
-                    <circle cx="132" cy="196" r="29" fill="#f1e7cc" opacity=".9"/>
-                    <g fill="#f1e7cc" opacity=".68">
-                      <circle cx="83" cy="118" r="1.4"/><circle cx="218" cy="139" r="1.2"/><circle cx="247" cy="238" r="1.5"/>
-                      <circle cx="82" cy="287" r="1"/><circle cx="192" cy="92" r="1.1"/><circle cx="230" cy="326" r="1.3"/>
-                    </g>
-                    <g stroke="#4e4030" stroke-width="4" opacity=".7">
-                      <path d="M171 74v310M61 196h230"/>
-                    </g>
-                  </g>
-                  <g fill="#2a1b15" stroke="#5a3b27" stroke-width="2">
-                    <path d="M16 100c22 46 19 102 12 148 20 32 24 77 16 126H16Z"/>
-                    <path d="M314 100c-22 46-19 102-12 148-20 32-24 77-16 126h28Z"/>
-                  </g>
-                </g>
-                <path d="M28 500h328l94 98H0Z" fill="url(#lightShaft)" opacity=".45"/>
-
-                <!-- bookshelf -->
-                <g>
-                  <rect x="296" y="92" width="278" height="350" fill="#1c130d" stroke="#5c4028" stroke-width="3"/>
-                  <rect x="308" y="104" width="254" height="326" fill="#241810"/>
-                  <g fill="url(#roomWood)">
-                    <rect x="296" y="92" width="18" height="350"/><rect x="556" y="92" width="18" height="350"/>
-                    <rect x="308" y="104" width="254" height="12"/><rect x="308" y="186" width="254" height="10"/>
-                    <rect x="308" y="265" width="254" height="10"/><rect x="308" y="344" width="254" height="10"/>
-                    <rect x="308" y="420" width="254" height="10"/>
-                  </g>
-                  <g>
-                    <rect x="325" y="124" width="18" height="60" fill="#6c4a32"/><rect x="347" y="116" width="13" height="68" fill="#8b6a45"/>
-                    <rect x="364" y="128" width="22" height="56" fill="#3e5f5e"/><rect x="390" y="120" width="15" height="64" fill="#7f5f3b"/>
-                    <rect x="409" y="131" width="25" height="53" fill="#594239"/><rect x="438" y="118" width="12" height="66" fill="#a17d4f"/>
-                    <rect x="454" y="126" width="20" height="58" fill="#40585a"/><rect x="478" y="121" width="14" height="63" fill="#6b4530"/>
-                    <rect x="496" y="130" width="24" height="54" fill="#8c6c44"/><rect x="524" y="123" width="16" height="61" fill="#493429"/>
-                  </g>
-                  <g>
-                    <rect x="327" y="203" width="14" height="54" fill="#3c5a58"/><rect x="345" y="197" width="21" height="60" fill="#745034"/>
-                    <rect x="370" y="208" width="13" height="49" fill="#967248"/><rect x="387" y="201" width="18" height="56" fill="#4b3430"/>
-                    <rect x="409" y="195" width="12" height="62" fill="#7d5e3d"/><rect x="425" y="206" width="24" height="51" fill="#3b5254"/>
-                    <rect x="453" y="200" width="16" height="57" fill="#8b633c"/><rect x="473" y="210" width="12" height="47" fill="#5c4230"/>
-                    <rect x="490" y="198" width="22" height="59" fill="#31504f"/><rect x="516" y="204" width="15" height="53" fill="#765335"/>
-                  </g>
-                  <g>
-                    <rect x="325" y="283" width="22" height="55" fill="#533b2d"/><rect x="351" y="277" width="13" height="61" fill="#8e6b42"/>
-                    <rect x="369" y="288" width="18" height="50" fill="#365552"/><rect x="392" y="279" width="25" height="59" fill="#6b4830"/>
-                    <rect x="421" y="290" width="12" height="48" fill="#9d7b4e"/><rect x="438" y="282" width="17" height="56" fill="#4c3630"/>
-                    <rect x="459" y="286" width="23" height="52" fill="#3e5d5a"/><rect x="486" y="275" width="14" height="63" fill="#7f5c39"/>
-                    <rect x="503" y="289" width="20" height="49" fill="#5d4030"/><rect x="528" y="281" width="13" height="57" fill="#8e6d46"/>
-                  </g>
-                  <g>
-                    <rect x="326" y="360" width="20" height="54" fill="#6f4d34"/><rect x="350" y="354" width="15" height="60" fill="#405d5b"/>
-                    <rect x="369" y="365" width="24" height="49" fill="#84623f"/><rect x="398" y="357" width="12" height="57" fill="#4f382d"/>
-                    <rect x="414" y="366" width="19" height="48" fill="#31504e"/><rect x="437" y="359" width="22" height="55" fill="#795634"/>
-                    <rect x="463" y="363" width="13" height="51" fill="#9a7649"/><rect x="480" y="355" width="17" height="59" fill="#594132"/>
-                    <rect x="501" y="367" width="23" height="47" fill="#3a5755"/><rect x="528" y="361" width="14" height="53" fill="#7e5d3b"/>
-                  </g>
-                  <!-- the red book, tilted -->
-                  <g transform="rotate(-14 468 404)">
-                    <rect x="448" y="365" width="31" height="47" fill="#7f2f2b" stroke="#c5915a" stroke-width="1"/>
-                    <text id="room-book-numeral" x="463" y="395" fill="#e8c997" font-family="Georgia, serif" font-size="10.5" text-anchor="middle" transform="rotate(90 463 390)">VII</text>
-                  </g>
-                  <rect x="296" y="92" width="278" height="14" fill="url(#roomGold)" opacity=".5"/>
-                </g>
-
-                <!-- painting -->
-                <g>
-                  <rect x="632" y="93" width="218" height="174" fill="url(#roomGold)"/>
-                  <rect x="644" y="105" width="194" height="150" fill="#18272c"/>
-                  <rect x="655" y="116" width="172" height="128" fill="#0d1b21"/>
-                  <circle cx="802" cy="147" r="24" fill="#e9ddc0" opacity=".75"/>
-                  <g fill="#e9ddc0" opacity=".9">
-                    <path class="room-bird" d="M676 200c7-12 12-18 20-24-4 12-8 21-13 31-3-2-5-4-7-7Z"/>
-                    <path class="room-bird" d="M701 211c6-13 11-22 18-29-2 13-5 23-9 34-4-1-6-3-9-5Z"/>
-                    <path class="room-bird" d="M730 196c7-10 13-16 21-22-3 11-8 20-13 29-3-2-5-4-8-7Z"/>
-                    <path class="room-bird" d="M751 217c6-11 11-18 18-24-2 12-5 21-9 30-4-1-6-3-9-6Z"/>
-                    <path class="room-bird" d="M707 166c8-9 14-14 22-19-4 10-9 18-15 26-2-2-5-4-7-7Z"/>
-                    <path class="room-bird" d="M775 174c8-10 14-15 22-20-4 11-9 19-15 27-2-2-5-4-7-7Z"/>
-                  </g>
-                  <path d="M655 222c35-14 68-20 110-16" stroke="#415a55" stroke-width="3" fill="none" opacity=".55"/>
-                  <rect x="632" y="93" width="218" height="6" fill="#f0d39a" opacity=".55"/>
-                </g>
-
-                <!-- grandfather clock -->
-                <g>
-                  <path d="M684 299h116v300h-116Z" fill="url(#roomWood)" stroke="#2a1c12"/>
-                  <path d="M700 312h84v272h-84Z" fill="#1a110c" opacity=".8"/>
-                  <circle cx="742" cy="394" r="47" fill="#0d1518" stroke="url(#roomGold)" stroke-width="4"/>
-                  <circle cx="742" cy="394" r="38" fill="#152126"/>
-                  <g stroke="#d8b77e" stroke-width="1.5" opacity=".55">
-                    <path d="M742 365v6M742 417v6M713 394h6M765 394h6M721 373l4 4M759 411l4 4M759 377l-4 4M721 415l4-4"/>
-                  </g>
-                  <path id="room-hour-hand" d="M742 394v-22" stroke="#e5c88e" stroke-width="3.4" stroke-linecap="round" transform="rotate(270 742 394)"/>
-                  <path d="M742 394v-27" stroke="#e5c88e" stroke-width="2.4" stroke-linecap="round"/>
-                  <circle cx="742" cy="394" r="4" fill="#e5c88e"/>
-                  <g stroke="#9b7443" stroke-width="1.5" opacity=".35">
-                    <path d="M708 440v130M776 440v130M708 570h68"/>
-                  </g>
-                  <circle cx="742" cy="548" r="18" fill="#b5874e" opacity=".6"/>
-                  <path d="M742 440v91" stroke="#b5874e" stroke-width="2"/>
-                </g>
-
-                <!-- desk -->
-                <g>
-                  <rect x="64" y="426" width="442" height="24" fill="url(#roomWood)" stroke="#24170f"/>
-                  <rect x="84" y="450" width="20" height="126" fill="#332217"/>
-                  <rect x="460" y="450" width="20" height="126" fill="#332217"/>
-                  <rect x="174" y="450" width="202" height="88" fill="#3b281a" stroke="#1e130d"/>
-                  <rect x="190" y="469" width="170" height="48" fill="#2b1c12"/>
-                  <path d="M190 469h170M190 507h170" stroke="#6b4a2c" stroke-width="2"/>
-                  <rect x="260" y="486" width="30" height="6" rx="3" fill="url(#roomGold)"/>
-                  <g class="room-marble" transform="translate(234 497)">
-                    <circle r="7" fill="#3e7c82" opacity=".85"/><circle cx="-2" cy="-3" r="2" fill="#b8e3de" opacity=".8"/>
-                  </g>
-                  <g class="room-marble" transform="translate(252 497)">
-                    <circle r="7" fill="#3e7c82" opacity=".85"/><circle cx="-2" cy="-3" r="2" fill="#b8e3de" opacity=".8"/>
-                  </g>
-                  <g class="room-marble" transform="translate(270 497)">
-                    <circle r="7" fill="#3e7c82" opacity=".85"/><circle cx="-2" cy="-3" r="2" fill="#b8e3de" opacity=".8"/>
-                  </g>
-                  <g class="room-marble" transform="translate(288 497)">
-                    <circle r="7" fill="#3e7c82" opacity=".85"/><circle cx="-2" cy="-3" r="2" fill="#b8e3de" opacity=".8"/>
-                  </g>
-                  <!-- lamp -->
-                  <ellipse cx="132" cy="424" rx="48" ry="8" fill="#1a110b"/>
-                  <path d="M128 424v-54" stroke="#a47c4b" stroke-width="4"/>
-                  <path d="M101 367h54l-12-35h-30Z" fill="#b9894d" stroke="#e4c58d" stroke-width="1"/>
-                  <ellipse cx="128" cy="333" rx="15" ry="3" fill="#e4c58d" opacity=".55"/>
-                  <circle cx="128" cy="372" r="116" fill="url(#lampGlow)"/>
-                  <!-- note -->
-                  <g transform="rotate(-4 360 455)">
-                    <rect x="314" y="437" width="103" height="64" fill="#e9dcc1" opacity=".94"/>
-                    <path d="M326 453h77M326 463h64M326 473h72M326 483h48" stroke="#836d4f" stroke-width="1.2" opacity=".65"/>
-                  </g>
-                </g>
-
-                <g fill="#e9d6ab" opacity=".3" class="dust-motes">
-                  <circle cx="207" cy="327" r="1.3"/><circle cx="389" cy="312" r="1"/><circle cx="597" cy="489" r="1.2"/>
-                  <circle cx="809" cy="437" r="1"/><circle cx="477" cy="533" r="1.4"/><circle cx="104" cy="545" r="1"/>
-                </g>
-                <text x="58" y="670" fill="#b28b54" font-family="Georgia, serif" font-size="12" letter-spacing="5" opacity=".6">SILENT STUDY · GATE II</text>
-                <text x="842" y="670" fill="#b28b54" font-family="Georgia, serif" font-size="12" letter-spacing="4" opacity=".35" text-anchor="end">MMXXVI</text>
-              </svg>
-
-              <button class="hotspot hotspot--books" type="button" data-clue="books" aria-label="調查書架" aria-pressed="false">
-                <span class="hotspot-pin"><svg class="icon hotspot-search"><use href="#i-search"></use></svg><svg class="icon hotspot-check"><use href="#i-check"></use></svg></span>
-                <span class="hotspot-label">書架</span>
-              </button>
-              <button class="hotspot hotspot--painting" type="button" data-clue="painting" aria-label="調查畫作" aria-pressed="false">
-                <span class="hotspot-pin"><svg class="icon hotspot-search"><use href="#i-search"></use></svg><svg class="icon hotspot-check"><use href="#i-check"></use></svg></span>
-                <span class="hotspot-label">畫作</span>
-              </button>
-              <button class="hotspot hotspot--clock" type="button" data-clue="clock" aria-label="調查掛鐘" aria-pressed="false">
-                <span class="hotspot-pin"><svg class="icon hotspot-search"><use href="#i-search"></use></svg><svg class="icon hotspot-check"><use href="#i-check"></use></svg></span>
-                <span class="hotspot-label">掛鐘</span>
-              </button>
-              <button class="hotspot hotspot--drawer" type="button" data-clue="drawer" aria-label="調查抽屜" aria-pressed="false">
-                <span class="hotspot-pin"><svg class="icon hotspot-search"><use href="#i-search"></use></svg><svg class="icon hotspot-check"><use href="#i-check"></use></svg></span>
-                <span class="hotspot-label">抽屜</span>
-              </button>
-              <div class="room-paper" aria-hidden="true">
-                <span>桌上的紙條</span>
-                <strong id="room-order-paper">書→畫→鐘→抽屜</strong>
-                <small>四位數</small>
-              </div>
-            </div>
-            <div class="scene-corner scene-corner--tl" aria-hidden="true"></div>
-            <div class="scene-corner scene-corner--br" aria-hidden="true"></div>
-            <div class="scene-caption">
-              <span class="scene-caption-kicker">第二關 · 密室逃脫</span>
-              <strong>無聲書房</strong>
-              <span>門從外面鎖上了。先調查，再離開。</span>
-            </div>
-          </div>
-        </div>
-
-        <div class="level-panel">
-          <div class="panel-heading">
-            <p class="eyebrow">LEVEL II / ESCAPE ROOM</p>
-            <h2 id="level-2-title" tabindex="-1">無聲書房</h2>
-            <p class="story">你在一間上鎖的書房醒來。桌上留著一張紙條：<br><q>四位數。依序是：<span id="room-order-inline">書、畫、鐘、抽屜</span>。</q></p>
-          </div>
-
-          <div class="notebook">
-            <div class="notebook-head">
-              <span><svg class="icon"><use href="#i-search"></use></svg>調查筆記</span>
-              <span class="clue-count" id="clue-count">0 / 4</span>
-            </div>
-            <ul class="clue-list" id="clue-list">
-              <li data-clue-row="books"><span class="clue-index" aria-hidden="true">◆</span><span class="clue-name">書架</span><span class="clue-text">尚未調查</span></li>
-              <li data-clue-row="painting"><span class="clue-index" aria-hidden="true">◆</span><span class="clue-name">畫作</span><span class="clue-text">尚未調查</span></li>
-              <li data-clue-row="clock"><span class="clue-index" aria-hidden="true">◆</span><span class="clue-name">掛鐘</span><span class="clue-text">尚未調查</span></li>
-              <li data-clue-row="drawer"><span class="clue-index" aria-hidden="true">◆</span><span class="clue-name">抽屜</span><span class="clue-text">尚未調查</span></li>
-            </ul>
-            <p class="notebook-tip" id="notebook-tip">點亮場景中的四個放大鏡。密碼順序，以桌上的紙條為準。</p>
-          </div>
-
-          <form class="answer-form code-form" id="room-form" novalidate>
-            <span class="code-label" id="code-label">四位數密碼</span>
-            <div class="code-row">
-              <div class="code-inputs" id="code-inputs" role="group" aria-labelledby="code-label">
-                <input class="code-digit" type="text" inputmode="numeric" pattern="[0-9]*" maxlength="1" autocomplete="off" aria-label="密碼第 1 位">
-                <input class="code-digit" type="text" inputmode="numeric" pattern="[0-9]*" maxlength="1" autocomplete="off" aria-label="密碼第 2 位">
-                <input class="code-digit" type="text" inputmode="numeric" pattern="[0-9]*" maxlength="1" autocomplete="off" aria-label="密碼第 3 位">
-                <input class="code-digit" type="text" inputmode="numeric" pattern="[0-9]*" maxlength="1" autocomplete="off" aria-label="密碼第 4 位">
-              </div>
-              <button class="btn btn--submit" type="submit">
-                <span>轉動門鎖</span>
-                <svg class="icon"><use href="#i-lock"></use></svg>
-              </button>
-            </div>
-          </form>
-
-          <p class="feedback" id="room-feedback" aria-live="polite"></p>
-
-          <div class="hint-block" data-hint-level="2">
-            <button class="hint-toggle" type="button" aria-expanded="false" aria-controls="room-hints">
-              <span><svg class="icon"><use href="#i-sparkle"></use></svg>需要一點提示？</span>
-              <span class="hint-count">0 / 2</span>
-            </button>
-            <div class="hint-drawer" id="room-hints" hidden></div>
-          </div>
-        </div>
-      </article>
-
-      <!-- 第三關 -->
-      <article class="level level--birthday" id="level-3" hidden>
-        <div class="level-scene scene--birthday">
-          <div class="scene-frame">
-            <svg class="scene-svg" viewBox="0 0 900 700" role="img" aria-label="一間佈置好的生日宴會廳，桌上有一座插著未點燃蠟燭的蛋糕、禮物和一只沒有寫日期的信封">
-              <defs>
-                <linearGradient id="partyWall" x1="0" y1="0" x2="0.6" y2="1">
-                  <stop offset="0" stop-color="#251b26"/>
-                  <stop offset=".55" stop-color="#171f25"/>
-                  <stop offset="1" stop-color="#0b1115"/>
-                </linearGradient>
-                <radialGradient id="partyGlow" cx=".5" cy=".5" r=".5">
-                  <stop offset="0" stop-color="#e8b77c" stop-opacity=".42"/>
-                  <stop offset=".55" stop-color="#c88476" stop-opacity=".12"/>
-                  <stop offset="1" stop-color="#c88476" stop-opacity="0"/>
-                </radialGradient>
-                <linearGradient id="partyTable" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="0" stop-color="#eadcc0"/>
-                  <stop offset="1" stop-color="#c7b28f"/>
-                </linearGradient>
-                <linearGradient id="partyCake" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="0" stop-color="#f3e3c8"/>
-                  <stop offset="1" stop-color="#d3b98e"/>
-                </linearGradient>
-                <radialGradient id="partyMoon" cx=".5" cy=".5" r=".5">
-                  <stop offset="0" stop-color="#f1e3c9" stop-opacity=".8"/>
-                  <stop offset="1" stop-color="#bfa986" stop-opacity="0"/>
-                </radialGradient>
-                <filter id="partySoft" x="-50%" y="-50%" width="200%" height="200%">
-                  <feGaussianBlur stdDeviation="18"/>
-                </filter>
-              </defs>
-              <rect width="900" height="700" fill="url(#partyWall)"/>
-              <g opacity=".14" stroke="#ecd4ac" fill="none">
-                <path d="M0 110h900M0 230h900M0 500h900"/>
-                <rect x="80" y="66" width="740" height="414" stroke-width="1"/>
-              </g>
-              <circle cx="700" cy="190" r="250" fill="url(#partyGlow)" opacity=".85"/>
-              <circle cx="700" cy="190" r="250" fill="url(#partyGlow)" filter="url(#partySoft)" opacity=".55"/>
-
-              <!-- window -->
-              <g>
-                <path d="M632 356V164a103 103 0 0 1 206 0v192Z" fill="#0b1a20" stroke="#5e4b3c" stroke-width="8"/>
-                <circle cx="735" cy="205" r="48" fill="url(#partyMoon)"/>
-                <circle cx="735" cy="205" r="22" fill="#eadfc9" opacity=".83"/>
-                <g fill="#eadfc9" opacity=".55">
-                  <circle cx="677" cy="140" r="1.2"/><circle cx="799" cy="174" r="1.4"/><circle cx="692" cy="303" r="1"/>
-                  <circle cx="806" cy="293" r="1.2"/><circle cx="757" cy="118" r="1"/>
-                </g>
-                <path d="M735 105v250M646 205h178" stroke="#5e4b3c" stroke-width="3" opacity=".6"/>
-                <path d="M616 112c22 36 19 92 12 144 19 26 25 68 18 100h-30Z" fill="#2b1d25" stroke="#60424b" stroke-width="2"/>
-                <path d="M854 112c-22 36-19 92-12 144-19 26-25 68-18 100h30Z" fill="#2b1d25" stroke="#60424b" stroke-width="2"/>
-              </g>
-
-              <!-- bunting -->
-              <path d="M40 90Q450 160 860 84" fill="none" stroke="#9e7b53" stroke-width="1.5" opacity=".6"/>
-              <g opacity=".85">
-                <path d="M128 112l24 4-9 49Z" fill="#8f5a52"/>
-                <path d="M238 127l24 2-12 48Z" fill="#c1a06b"/>
-                <path d="M354 138l24-1-13 47Z" fill="#4e7470"/>
-                <path d="M478 143l24-3-13 49Z" fill="#a47065"/>
-                <path d="M600 136l24-4-10 49Z" fill="#c1a06b"/>
-                <path d="M715 124l24-3-8 48Z" fill="#4e7470"/>
-              </g>
-
-              <!-- hanging lamp -->
-              <g>
-                <path d="M300 0v92" stroke="#8b704d" stroke-width="2"/>
-                <path d="M266 128h68l-18 34h-32Z" fill="#b0814d" stroke="#e2c18b" stroke-width="1"/>
-                <circle cx="300" cy="144" r="94" fill="url(#partyGlow)" opacity=".7"/>
-              </g>
-
-              <!-- table -->
-              <ellipse cx="390" cy="634" rx="335" ry="46" fill="#060a0c" opacity=".75"/>
-              <path d="M104 494h568l36 120H68Z" fill="url(#partyTable)" opacity=".94"/>
-              <path d="M104 494h568" stroke="#f3e5c8" stroke-width="5" opacity=".6"/>
-              <path d="M80 614h620v28H80Z" fill="#b49b77"/>
-              <g opacity=".4" stroke="#8c7457" stroke-width="1">
-                <path d="M180 520v92M300 520v92M420 520v92M540 520v92"/>
-              </g>
-
-              <!-- cake -->
-              <g>
-                <ellipse cx="300" cy="548" rx="130" ry="20" fill="#7e654d" opacity=".5"/>
-                <ellipse cx="300" cy="540" rx="118" ry="16" fill="#e4d4b8"/>
-                <path d="M200 454h200v78H200Z" fill="url(#partyCake)"/>
-                <path d="M200 454c0 12 45 22 100 22s100-10 100-22" fill="none" stroke="#f7edda" stroke-width="3"/>
-                <path d="M200 475c24 19 51 22 76 10 17-8 35-9 54 2 22 13 45 11 70-6v51H200Z" fill="#c97d75" opacity=".78"/>
-                <path d="M200 505c25 16 48 16 72 7 26-9 53-7 78 6 17 8 34 7 50-1v15H200Z" fill="#f1e2c8" opacity=".75"/>
-                <path d="M258 454v-36h84v36" fill="#efdfc4" stroke="#f8efdd" stroke-width="2"/>
-                <path d="M258 434c20 12 64 12 84 0" fill="none" stroke="#d0b58c" stroke-width="2"/>
-                <!-- candles -->
-                <g>
-                  <rect x="274" y="381" width="9" height="40" rx="2" fill="#d8b26d"/>
-                  <rect x="298" y="374" width="9" height="47" rx="2" fill="#c98f80"/>
-                  <rect x="322" y="383" width="9" height="38" rx="2" fill="#80a39a"/>
-                  <g fill="#f7d8a0">
-                    <path d="M278.5 370c7-7 2-18 2-18s-10 9-10 15a8 8 0 0 0 8 8" opacity=".9"/>
-                    <path d="M302.5 362c7-7 2-19 2-19s-10 10-10 16a8 8 0 0 0 8 8" opacity=".9"/>
-                    <path d="M326.5 372c7-7 2-18 2-18s-10 9-10 15a8 8 0 0 0 8 8" opacity=".9"/>
-                  </g>
-                </g>
-                <!-- topper -->
-                <g transform="translate(300 312)">
-                  <path d="M-22 28h44v-30h-44Z" fill="#ead9ba" stroke="#b8945e"/>
-                  <text x="0" y="18" text-anchor="middle" fill="#6f4e35" font-family="Georgia, serif" font-size="28">?</text>
-                  <path d="M0-2v-12" stroke="#b8945e" stroke-width="1.5"/>
-                </g>
-              </g>
-
-              <!-- gift -->
-              <g>
-                <rect x="474" y="444" width="110" height="92" fill="#365a57" stroke="#7da39b"/>
-                <rect x="474" y="474" width="110" height="15" fill="#c9a56c"/>
-                <rect x="519" y="444" width="18" height="92" fill="#c9a56c"/>
-                <path d="M528 444c-26-8-39-30-24-42 15-11 25 16 24 42ZM528 444c26-8 39-30 24-42-15-11-25 16-24 42Z" fill="#d9bc85" stroke="#8b6b44" stroke-width="1"/>
-              </g>
-
-              <!-- envelope -->
-              <g transform="rotate(-7 642 520)">
-                <rect x="575" y="486" width="150" height="94" fill="#e7d8bd" stroke="#b49b78"/>
-                <path d="m575 486 75 54 75-54" fill="none" stroke="#b49b78" stroke-width="1.6"/>
-                <circle cx="650" cy="544" r="13" fill="#8f5a52" opacity=".85"/>
-                <text x="650" y="548" text-anchor="middle" fill="#f0dfc6" font-size="10" font-family="Georgia, serif">?</text>
-              </g>
-
-              <!-- balloons -->
-              <g opacity=".85">
-                <path d="M826 360c-2 58 14 94-12 134" fill="none" stroke="#8b704d" stroke-width="1.2"/>
-                <ellipse cx="826" cy="326" rx="32" ry="40" fill="#8f5a52" opacity=".8"/>
-                <ellipse cx="818" cy="312" rx="8" ry="12" fill="#c98a7d" opacity=".55"/>
-                <path d="M848 404c20 32 20 80 0 106" fill="none" stroke="#8b704d" stroke-width="1.2"/>
-                <ellipse cx="852" cy="376" rx="25" ry="32" fill="#b08d59" opacity=".75"/>
-              </g>
-
-              <!-- empty chair -->
-              <g opacity=".6" stroke="#2a1c17" fill="none">
-                <path d="M90 620v-88h58v88M90 580h58M126 532v-44h58v70h-58" stroke-width="5"/>
-              </g>
-
-              <ellipse cx="390" cy="624" rx="360" ry="52" fill="url(#partyGlow)" opacity=".55"/>
-              <g fill="#f1d9a7" opacity=".45" class="dust-motes">
-                <circle cx="150" cy="330" r="1.3"/><circle cx="441" cy="280" r="1"/><circle cx="566" cy="362" r="1.2"/>
-                <circle cx="216" cy="415" r="1"/><circle cx="730" cy="430" r="1.3"/><circle cx="841" cy="540" r="1"/>
-              </g>
-              <text x="58" y="674" fill="#b28b54" font-family="Georgia, serif" font-size="12" letter-spacing="5" opacity=".55">THE MISSING DATE · GATE III</text>
-              <text x="842" y="674" fill="#b28b54" font-family="Georgia, serif" font-size="12" letter-spacing="4" opacity=".35" text-anchor="end">MMXXVI</text>
-            </svg>
-            <div class="scene-corner scene-corner--tl" aria-hidden="true"></div>
-            <div class="scene-corner scene-corner--br" aria-hidden="true"></div>
-            <div class="scene-caption">
-              <span class="scene-caption-kicker">第三關 · 生日謎題</span>
-              <strong>缺席的日期</strong>
-              <span>日期是烤箱的鑰匙；蛋糕，還在等你。</span>
-            </div>
-          </div>
-        </div>
-
-        <div class="level-panel">
-          <div class="panel-heading">
-            <p class="eyebrow">LEVEL III / BIRTHDAY</p>
-            <h2 id="level-3-title" tabindex="-1">缺席的日期</h2>
-            <p class="story">宴會廳已經佈置好了，蛋糕卻還只是在食譜裡。<br>邀請函沒有日期，只留下兩行數字。先找出日期，再走進廚房完成蛋糕。</p>
-          </div>
-
-          <div class="invitation">
-            <span class="invitation-pin" aria-hidden="true"></span>
-            <p class="invitation-to">致 解謎的人：</p>
-            <p class="invitation-line">我的生日，藏在兩個數字裡。</p>
-            <div class="invitation-math">
-              <span>月份 <b>×</b> 日期 <b>=</b> <em id="invite-product">—</em></span>
-              <span>月份 <b>+</b> 日期 <b>=</b> <em id="invite-sum">—</em></span>
-            </div>
-            <p class="invitation-sign">—— 來不及署名的壽星</p>
-          </div>
-
-          <form class="date-form" id="date-form" novalidate>
-            <div class="date-head">
-              <span class="date-label">選出那個日子</span>
-              <span class="date-readout" id="date-readout" aria-live="polite"><span id="readout-month">—</span><small>月</small><span id="readout-day">—</span><small>日</small></span>
-            </div>
-
-            <div class="month-tabs" id="month-tabs" role="group" aria-label="選擇月份"></div>
-            <div class="day-grid-wrap">
-              <div class="day-grid" id="day-grid" role="group" aria-label="選擇日期"></div>
-            </div>
-
-            <button class="btn btn--submit btn--birthday" type="submit">
-              <span>寫上日期</span>
-              <svg class="icon"><use href="#i-calendar"></use></svg>
-            </button>
-          </form>
-
-          <div class="kitchen-launch" id="kitchen-launch" hidden>
-            <span class="kitchen-launch-icon" aria-hidden="true"><svg class="icon"><use href="#i-cake"></use></svg></span>
-            <p class="eyebrow">THE BIRTHDAY KITCHEN</p>
-            <h3>日期找到了。</h3>
-            <p><strong id="kitchen-launch-date">—</strong>。廚房已經亮起，最後一道手續是完成生日蛋糕。</p>
-            <button class="btn btn--birthday" id="open-kitchen-btn" type="button">
-              <span>走進生日廚房</span>
-              <svg class="icon"><use href="#i-arrow"></use></svg>
-            </button>
-          </div>
-
-          <p class="feedback" id="date-feedback" aria-live="polite"></p>
-
-          <div class="hint-block" data-hint-level="3">
-            <button class="hint-toggle" type="button" aria-expanded="false" aria-controls="date-hints">
-              <span><svg class="icon"><use href="#i-sparkle"></use></svg>需要一點提示？</span>
-              <span class="hint-count">0 / 2</span>
-            </button>
-            <div class="hint-drawer" id="date-hints" hidden></div>
-          </div>
-        </div>
-      </article>
     </section>
 
-    <!-- ───────────────────────────── 終點 ───────────────────────────── -->
-    <section class="screen screen--final" id="screen-final" hidden>
-      <canvas class="confetti-canvas" id="confetti" aria-hidden="true"></canvas>
-      <div class="final-card">
-        <div class="final-seal" aria-hidden="true">
-          <span>通關</span>
+    <section class="section experience" id="experience">
+      <div class="section-head reveal">
+        <p class="eyebrow"><span class="rule"></span><span data-en="THE EXPERIENCE">體驗</span></p>
+        <h2 data-en-html="Not three questions.<br><em>A night out for your curiosity.</em>">不是三條題目，<br><em>而是一場有氣氛的夜遊。</em></h2>
+      </div>
+      <div class="experience-grid">
+        <div class="experience-copy reveal">
+          <p data-en="The Three Gates turns three distinct puzzle rooms into one continuous ritual. Each gate has its own sound, light and rhythm. A wrong answer goes nowhere; only the right one turns the lock.">《三關謎城》把三道界線分明的關卡，串成一個完整的儀式。每一道門都有自己的聲音、光線與節奏；答錯不會前進，答對才會聽見門鎖轉動。</p>
+          <p data-en="No sign-up. No download. Just a browser, a little curiosity, and a door that refuses to open until you are right.">不需要註冊、不需要下載。只要一個瀏覽器、一點好奇心，和一扇在你答對之前不會打開的門。</p>
+          <blockquote class="experience-quote">
+            <svg class="icon"><use href="#s-sparkle"></use></svg>
+            <span data-en="“The answer can be late. Curiosity cannot.”">「答案會遲到，但好奇心不會。」</span>
+          </blockquote>
         </div>
-        <p class="eyebrow eyebrow--center">THE THIRD GATE IS OPEN</p>
-        <h2 id="final-title" tabindex="-1">三關，皆開。</h2>
-        <p class="final-copy">你讓鐘塔重新轉動、走出了無聲書房，<br>也替那場生日找到了日期、完成了蛋糕。<br>三道門在你身後，靜靜敞開。</p>
-
-        <div class="final-stats">
-          <div><span>用時</span><strong id="stat-time">00:00</strong></div>
-          <div><span>錯誤</span><strong><span id="stat-wrong">0</span><small> 次</small></strong></div>
-          <div><span>提示</span><strong><span id="stat-hints">0</span><small> 次</small></strong></div>
+        <div class="experience-notes">
+          <article class="note-card reveal">
+            <span class="note-num">01</span>
+            <div><h3 data-en="Three ways to think">三種思考</h3><p data-en="Mathematics, observation, and a birthday riddle that refuses to be guessed.">數學、觀察，與一道不靠猜的生日謎題。</p></div>
+          </article>
+          <article class="note-card reveal">
+            <span class="note-num">02</span>
+            <div><h3 data-en="A hands-on finale">親手完成的結局</h3><p data-en="Mix, bake, and decorate a cake in a real-time Three.js kitchen.">在 Three.js 廚房裡攪拌、烘焙、裝飾一個生日蛋糕。</p></div>
+          </article>
+          <article class="note-card reveal">
+            <span class="note-num">03</span>
+            <div><h3 data-en="A different run every time">每一次都不同</h3><p data-en="Puzzle values, codes, clue order, dates and recipes are regenerated.">謎題數值、密碼、線索順序、日期與食譜都會重新生成。</p></div>
+          </article>
         </div>
+      </div>
+    </section>
 
-        <div class="final-rank">
-          <span class="final-rank-label">本次稱號</span>
-          <strong id="final-rank">冷靜的破題者</strong>
+    <section class="section chapters" id="chapters">
+      <div class="section-head section-head--split reveal">
+        <div>
+          <p class="eyebrow"><span class="rule"></span><span data-en="THE THREE GATES">三道關卡</span></p>
+          <h2 data-en-html="Three gates.<br><em>Three ways to think.</em>">三道門，<br><em>三種玩法。</em></h2>
         </div>
+        <p data-en="Each act is a different kind of attention. All three must be opened before the night is over.">每一幕都需要不同的注意力。三道門都開了，這場夜遊才算完成。</p>
+      </div>
 
-        <p class="final-quote"><svg class="icon"><use href="#i-quote"></use></svg>答案會遲到，但好奇心不會。</p>
+      <div class="chapter-grid">
+        <article class="chapter-card reveal">
+          <div class="chapter-media">
+            <img src="assets/chapter-math.jpg" alt="齒輪鐘樓關卡場景" data-en-alt="The Clockwork Tower scene">
+            <span class="chapter-index">I</span>
+            <span class="chapter-label">MATHEMATICS</span>
+          </div>
+          <div class="chapter-content">
+            <p class="eyebrow">CHAPTER I / MATHEMATICS</p>
+            <h3 data-en="The Clockwork Tower">齒輪鐘樓</h3>
+            <p data-en="In a stopped clock tower, three symbols stand for three positive integers. The gears are locked around one final equation. Solve it, and time moves again.">停擺的鐘塔裡，三個符號各代表一個正整數。齒輪咬合著最後一道算式；解開它，時間才會再次走動。</p>
+            <ul class="chapter-tags"><li data-en="Math">數學</li><li data-en="Logic">邏輯</li><li data-en="Order of operations">運算順序</li></ul>
+            <div class="chapter-foot"><span data-en="Gate I · approx. 2–3 min">第一道門 · 約 2–3 分鐘</span><a href="play.html?lang=zh-Hant" data-play-link><span data-en="Play from the start">從頭開始</span><svg class="icon"><use href="#s-arrow"></use></svg></a></div>
+          </div>
+        </article>
 
-        <div class="final-actions">
-          <button class="btn btn--primary" id="replay-btn" type="button">
-            <span>再挑戰一次</span>
-            <svg class="icon"><use href="#i-restart"></use></svg>
-          </button>
-          <button class="btn btn--ghost" id="share-btn" type="button">
-            <span>複製通關成績</span>
-            <svg class="icon"><use href="#i-share"></use></svg>
-          </button>
+        <article class="chapter-card reveal">
+          <div class="chapter-media">
+            <img src="assets/chapter-room.jpg" alt="無聲書房關卡場景" data-en-alt="The Silent Study scene">
+            <span class="chapter-index">II</span>
+            <span class="chapter-label">ESCAPE ROOM</span>
+          </div>
+          <div class="chapter-content">
+            <p class="eyebrow">CHAPTER II / ESCAPE ROOM</p>
+            <h3 data-en="The Silent Study">無聲書房</h3>
+            <p data-en="You wake in a locked study. Inspect the bookshelf, painting, clock and drawer; read the order on the note; build the four-digit code. Clues, numbers and order change every run.">你在一間上鎖的書房醒來。調查書架、畫作、掛鐘與抽屜，讀懂紙條上的順序，拼出四位數密碼。每局的線索、數字與順序都會改變。</p>
+            <ul class="chapter-tags"><li data-en="Observation">觀察</li><li data-en="Escape">密室</li><li data-en="Deduction">推理</li></ul>
+            <div class="chapter-foot"><span data-en="Gate II · approx. 2–3 min">第二道門 · 約 2–3 分鐘</span><a href="play.html?lang=zh-Hant" data-play-link><span data-en="Play from the start">從頭開始</span><svg class="icon"><use href="#s-arrow"></use></svg></a></div>
+          </div>
+        </article>
+
+        <article class="chapter-card chapter-card--featured reveal">
+          <div class="chapter-media">
+            <img src="assets/chapter-birthday.jpg" alt="缺席的日期關卡場景" data-en-alt="The Missing Date scene">
+            <span class="chapter-index">III</span>
+            <span class="chapter-label">BIRTHDAY · 3D</span>
+            <span class="chapter-feature-tag" data-en="3D FINALE">3D 壓軸</span>
+          </div>
+          <div class="chapter-content">
+            <p class="eyebrow">CHAPTER III / BIRTHDAY + 3D</p>
+            <h3 data-en="The Missing Date">缺席的日期</h3>
+            <p data-en="The invitation has no date—only a product and a sum. Find the one possible day, then step into a Three.js kitchen to mix, bake and decorate a real birthday cake.">邀請函沒有日期，只有乘積與加總。找出唯一的一天，再走進 Three.js 廚房，攪拌、烘焙、裝飾一個真正的生日蛋糕。</p>
+            <ul class="chapter-tags"><li data-en="Birthday riddle">生日謎題</li><li data-en="Three.js">Three.js</li><li data-en="Interactive 3D">互動 3D</li></ul>
+            <div class="chapter-foot"><span data-en="Gate III · approx. 3–4 min">第三道門 · 約 3–4 分鐘</span><a href="play.html?lang=zh-Hant" data-play-link><span data-en="Play from the start">從頭開始</span><svg class="icon"><use href="#s-arrow"></use></svg></a></div>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section class="kitchen-feature" id="kitchen">
+      <div class="kitchen-feature-inner">
+        <div class="kitchen-copy reveal">
+          <p class="eyebrow"><span class="rule"></span><span data-en="INSIDE THE FINALE">3D 壓軸</span></p>
+          <h2 data-en-html="The third gate isn't solved.<br><em>It's made.</em>">第三道門不是解開的，<br><em>是做出來的。</em></h2>
+          <p data-en="The date is only the ticket. Inside the real-time 3D kitchen you mix the batter, bake the cake, then follow a recipe for strawberries and candles. The recipe changes with the birthday.">日期只是入場券。走進即時 3D 廚房後，你要攪拌麵糊、把蛋糕送進烤箱，再照著食譜放上草莓和蠟燭。食譜會跟著當局生日改變。</p>
+          <ul class="kitchen-points">
+            <li><span class="point-dot"></span><span data-en="Real-time lights and an orbitable scene">即時光影與可旋轉場景</span></li>
+            <li><span class="point-dot"></span><span data-en="Click the objects or use the accessible buttons">點擊物件或使用按鈕皆可</span></li>
+            <li><span class="point-dot"></span><span data-en="A recipe generated from the date">食譜依日期生成</span></li>
+            <li><span class="point-dot"></span><span data-en="A usable fallback when WebGL is unavailable">WebGL 無法使用時仍可完成</span></li>
+          </ul>
+          <div class="kitchen-tech"><span>THREE.JS r149</span><span>WEBGL</span><span data-en="REAL-TIME">即時渲染</span></div>
         </div>
-        <p class="final-best" id="final-best"></p>
+        <figure class="kitchen-visual reveal">
+          <div class="kitchen-frame">
+            <img src="assets/kitchen.jpg" alt="Three.js 生日廚房：完成的蛋糕、草莓、蠟燭與廚房場景" data-en-alt="The Three.js birthday kitchen: a finished cake, strawberries, candles and the kitchen scene">
+            <div class="kitchen-frame-bar"><span>GATE III</span><span data-en="LIVE SCENE">即時場景</span></div>
+            <div class="kitchen-live"><i></i><span data-en="REAL-TIME 3D">即時 3D</span></div>
+          </div>
+          <figcaption data-en="A small cooking game, not a cutscene. Every cake is assembled by the player.">不是過場動畫，而是一場小小的煮食遊戲。每一個蛋糕，都由玩家親手完成。</figcaption>
+        </figure>
+      </div>
+    </section>
+
+    <section class="section features">
+      <div class="section-head reveal">
+        <p class="eyebrow"><span class="rule"></span><span data-en="DETAILS">細節</span></p>
+        <h2 data-en-html="Details that let<br><em>curiosity go further.</em>">細節，為了讓<br><em>好奇心走得更遠。</em></h2>
+      </div>
+      <div class="feature-grid">
+        <article class="feature-card reveal">
+          <span class="feature-icon"><svg class="icon"><use href="#s-sparkle"></use></svg></span>
+          <h3 data-en="A new puzzle every run">每局都是新謎</h3>
+          <p data-en="Values, codes, clue order, birthday dates and cake recipes are regenerated every time you start again.">數學數值、密室密碼與紙條順序、生日日期與蛋糕食譜，全部重新生成。</p>
+        </article>
+        <article class="feature-card reveal">
+          <span class="feature-icon"><svg class="icon"><use href="#s-key"></use></svg></span>
+          <h3 data-en="Hints, not spoilers">提示，不劇透</h3>
+          <p data-en="Two carefully layered hints for every gate. They point in a direction; they never open the door for you.">每關兩段提示。它們給方向，不替你開門。</p>
+        </article>
+        <article class="feature-card reveal">
+          <span class="feature-icon"><svg class="icon"><use href="#s-clock"></use></svg></span>
+          <h3 data-en="Time, records, replay">時間與紀錄</h3>
+          <p data-en="A quiet timer, mistake count and hint count; your best run stays in your browser.">計時、錯誤次數與提示用量；最佳紀錄留在你的瀏覽器。</p>
+        </article>
+        <article class="feature-card reveal">
+          <span class="feature-icon"><svg class="icon"><use href="#s-cube"></use></svg></span>
+          <h3 data-en="Built for small screens">為手機而生</h3>
+          <p data-en="A responsive two-column game becomes a one-hand experience. The 3D kitchen has buttons for every 3D action.">單手可玩的版面；3D 廚房的每個動作都有按鈕備援。</p>
+        </article>
+        <article class="feature-card reveal">
+          <span class="feature-icon"><svg class="icon"><use href="#s-globe"></use></svg></span>
+          <h3 data-en="中文 / English">中文 / English</h3>
+          <p data-en="The full commercial site and the game are available in Traditional Chinese and English.">整個商業網站與遊戲都提供繁體中文與英文版本。</p>
+        </article>
+        <article class="feature-card reveal">
+          <span class="feature-icon"><svg class="icon"><use href="#s-check"></use></svg></span>
+          <h3 data-en="Accessible by default">無障礙不是附加項</h3>
+          <p data-en="Keyboard paths, clear focus, screen-reader labels and a reduced-motion mode are part of the build.">鍵盤操作、清晰焦點、螢幕閱讀器標籤與減少動態效果，都是設計的一部分。</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="section how" id="how">
+      <div class="section-head section-head--split reveal">
+        <div>
+          <p class="eyebrow"><span class="rule"></span><span data-en="HOW IT WORKS">怎麼玩</span></p>
+          <h2 data-en-html="One browser.<br><em>Three gates.</em>">一個瀏覽器，<br><em>三道門。</em></h2>
+        </div>
+        <p data-en="No install. No account. The whole experience is built to begin in seconds and stay with you afterward.">不需要安裝，也不需要帳號。整個體驗只需幾秒就能開始，並在結束後留下一點餘韻。</p>
+      </div>
+      <ol class="how-grid">
+        <li class="how-card reveal"><span class="how-num">01</span><h3 data-en="Choose your language">選擇語言</h3><p data-en="Open the site in Traditional Chinese or English. Your choice follows you into the game.">以繁體中文或英文開啟網站，選擇會跟著你進入遊戲。</p></li>
+        <li class="how-card reveal"><span class="how-num">02</span><h3 data-en="Open the gates">一關一關解</h3><p data-en="Math, escape room, birthday riddle. A wrong answer does not move the lock.">數學、密室、生日謎題。答錯，門鎖不會動。</p></li>
+        <li class="how-card reveal"><span class="how-num">03</span><h3 data-en="Bake the ending">完成蛋糕</h3><p data-en="Mix, bake and decorate the cake, then collect your time, title and a result you can copy.">攪拌、烘焙、裝飾蛋糕，然後取得用時、稱號與可複製的成績。</p></li>
+      </ol>
+    </section>
+
+    <section class="section audience">
+      <div class="audience-panel reveal">
+        <div>
+          <p class="eyebrow"><span class="rule"></span><span data-en="MADE FOR">適合誰玩</span></p>
+          <h2 data-en-html="A small ritual for<br><em>curious company.</em>">給好奇心，<br><em>一個小小的儀式。</em></h2>
+        </div>
+        <div class="audience-grid">
+          <div><span data-en="Classroom warm-up">課堂暖身</span></div>
+          <div><span data-en="Game night">派對聚會</span></div>
+          <div><span data-en="Team icebreaker">團隊破冰</span></div>
+          <div><span data-en="A solo night in">一個人的夜遊</span></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section creator" id="creator">
+      <div class="creator-panel reveal">
+        <div class="creator-mark" aria-hidden="true">
+          <span class="creator-seal">劉</span>
+          <span class="creator-class">2B</span>
+          <span class="creator-line"></span>
+          <span class="creator-label">CREATOR</span>
+        </div>
+        <div class="creator-copy">
+          <p class="eyebrow"><span class="rule"></span><span data-en="ABOUT THE CREATOR">關於創作者</span></p>
+          <h2>2B 劉清婷</h2>
+          <p class="creator-role" data-en="Creator · Designer · Developer">創作者 · 設計 · 開發</p>
+          <p class="creator-lede" data-en="The Three Gates is my answer to a simple question: can a webpage feel like a place? I put three kinds of puzzles I love—math, escape rooms and birthdays—into one night. I hope you forget you're only in a browser.">《三關謎城》是我對「網頁能不能像一個地方」的回答。我把數學、密室與生日三個我喜歡的題型，放進同一個夜晚；希望坐下來的人，會忘記自己其實只是在瀏覽器裡。</p>
+          <p class="creator-note" data-en="Built with vanilla HTML, CSS and JavaScript, original SVG scenes, and a Three.js r149 kitchen.">以原生 HTML、CSS、JavaScript、原創 SVG 場景與 Three.js r149 廚房製作。</p>
+          <div class="creator-links">
+            <a class="text-link" href="https://github.com/s20250051-cpu/ting123" target="_blank" rel="noopener">
+              <svg class="icon"><use href="#s-github"></use></svg>
+              <span data-en="View the source">查看原始碼</span>
+            </a>
+            <a class="text-link" href="#faq"><span data-en="Read the FAQ">閱讀常見問題</span><svg class="icon"><use href="#s-arrow"></use></svg></a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section faq" id="faq">
+      <div class="section-head section-head--split reveal">
+        <div>
+          <p class="eyebrow"><span class="rule"></span><span data-en="FAQ">常見問題</span></p>
+          <h2 data-en-html="Before you<br><em>open the first door.</em>">推開第一道門前，<br><em>你可能想知道。</em></h2>
+        </div>
+        <p data-en="Everything you need to know about the experience, the technology, and what happens to your data.">關於這場體驗、使用的技術，以及你的資料，都在這裡。</p>
+      </div>
+      <div class="faq-list">
+        <details class="faq-item reveal">
+          <summary><span data-en="Do I need to download or sign up?">需要下載或註冊嗎？</span><svg class="icon"><use href="#s-chevron"></use></svg></summary>
+          <p data-en="No. The whole experience runs in a modern browser and is free to play. No account, no download, no payment.">不需要。整個體驗在現代瀏覽器中運行，免費遊玩；沒有帳號、下載或付款。</p>
+        </details>
+        <details class="faq-item reveal">
+          <summary><span data-en="How long does one run take?">一場大約多久？</span><svg class="icon"><use href="#s-chevron"></use></svg></summary>
+          <p data-en="About five to ten minutes for a first run. The puzzles regenerate, so a second run is a different night.">第一次玩約五到十分鐘。謎題會重新生成，所以第二次會是另一個夜晚。</p>
+        </details>
+        <details class="faq-item reveal">
+          <summary><span data-en="Can I play on a phone?">手機可以玩嗎？</span><svg class="icon"><use href="#s-chevron"></use></svg></summary>
+          <p data-en="Yes. The layout, input and 3D scene are designed to work on phones. The 3D kitchen needs WebGL; if it is unavailable, every cooking step still has a button fallback.">可以。版面、輸入與 3D 場景都為手機設計。3D 廚房需要 WebGL；若裝置不支援，每個煮食步驟仍有按鈕備援。</p>
+        </details>
+        <details class="faq-item reveal">
+          <summary><span data-en="Is it the same every time?">每次題目都一樣嗎？</span><svg class="icon"><use href="#s-chevron"></use></svg></summary>
+          <p data-en="No. Math values, escape-room clues and clue order, the birthday date and the cake recipe are all generated per run.">不。數學數值、密室線索與順序、生日日期與蛋糕食譜，都會依每一局重新生成。</p>
+        </details>
+        <details class="faq-item reveal">
+          <summary><span data-en="Are Traditional Chinese and English both available?">有繁體中文和英文嗎？</span><svg class="icon"><use href="#s-chevron"></use></svg></summary>
+          <p data-en="Yes. The commercial site and the game can both be played in Traditional Chinese or English. Use the language switch at the top of either page.">有。商業網站與遊戲都提供繁體中文與英文；可在任何一頁的右上角切換語言。</p>
+        </details>
+        <details class="faq-item reveal">
+          <summary><span data-en="Do you collect my data?">會收集我的資料嗎？</span><svg class="icon"><use href="#s-chevron"></use></svg></summary>
+          <p data-en="No accounts, ads or third-party tracking. Your language choice and best run are stored only in your browser's local storage.">沒有帳號、廣告或第三方追蹤。語言選擇與最佳紀錄只存在瀏覽器的本機儲存空間。</p>
+        </details>
+        <details class="faq-item reveal">
+          <summary><span data-en="What is it built with?">這是用什麼做的？</span><svg class="icon"><use href="#s-chevron"></use></svg></summary>
+          <p data-en="Vanilla HTML, CSS and JavaScript; original SVG scenes; a Three.js r149 kitchen; and no external image, font or audio dependencies.">原生 HTML、CSS、JavaScript、原創 SVG 場景、Three.js r149 廚房，沒有外部圖片、字型或音訊依賴。</p>
+        </details>
+      </div>
+    </section>
+
+    <section class="final-cta" id="play">
+      <div class="final-cta-inner reveal">
+        <p class="eyebrow"><span class="rule"></span><span data-en="THE GATES ARE LIT">三道門已經亮起</span></p>
+        <h2 data-en-html="All you need is a little curiosity.<br><em>And the right answer.</em>">你只需要一點好奇心，<br><em>和一個答案。</em></h2>
+        <p data-en="Three gates. One browser. A birthday cake waiting at the end.">三道門、一個瀏覽器，還有一個在終點等你的生日蛋糕。</p>
+        <a class="btn btn-primary btn-large" href="play.html?lang=zh-Hant" data-play-link>
+          <span data-en="Open the first gate">推開第一道門</span>
+          <svg class="icon"><use href="#s-arrow"></use></svg>
+        </a>
+        <small data-en="Free · No sign-up · 5–10 minutes">免費 · 不需註冊 · 5–10 分鐘</small>
       </div>
     </section>
   </main>
 
-  <!-- ───────────────────────── 3D 生日廚房 ───────────────────────── -->
-  <section class="kitchen-overlay" id="kitchen-overlay" aria-hidden="true" hidden>
-    <div class="kitchen-shell" role="dialog" aria-modal="true" aria-labelledby="kitchen-title">
-      <header class="kitchen-header">
-        <div class="kitchen-heading">
-          <span class="kitchen-3d-mark" aria-hidden="true">3D</span>
-          <div>
-            <p class="eyebrow">FINAL TOUCH · BIRTHDAY KITCHEN</p>
-            <h2 id="kitchen-title" tabindex="-1">做一個生日蛋糕</h2>
-          </div>
-        </div>
-        <div class="kitchen-head-actions">
-          <span class="kitchen-date-chip" id="kitchen-date">—</span>
-          <button class="kitchen-close" id="kitchen-close-btn" type="button" aria-label="先回邀請函">
-            <span>先回邀請函</span>
-            <svg class="icon"><use href="#i-close"></use></svg>
-          </button>
-        </div>
-      </header>
-
-      <div class="kitchen-body">
-        <div class="kitchen-stage" id="kitchen-stage">
-          <canvas id="kitchen-canvas" role="img" aria-label="可互動的 3D 生日廚房：鋼盆、烤箱、草莓與蠟燭"></canvas>
-          <div class="kitchen-loader" id="kitchen-loader">
-            <span class="kitchen-loader-ring" aria-hidden="true"></span>
-            <span>預熱廚房…</span>
-          </div>
-          <div class="kitchen-fallback" id="kitchen-fallback" hidden>
-            <span class="kitchen-fallback-icon" aria-hidden="true">♨</span>
-            <strong>3D 場景沒有亮起</strong>
-            <span>仍可以用旁邊的按鈕完成蛋糕。</span>
-          </div>
-          <span class="kitchen-scene-badge">THREE.JS · REAL-TIME 3D</span>
-          <span class="kitchen-drag-hint">拖曳可轉動視角 · 點擊場景中的物件</span>
-        </div>
-
-        <aside class="kitchen-hud">
-          <ol class="kitchen-stepper" id="kitchen-stepper" aria-label="煮食步驟">
-            <li class="kitchen-chip is-current" data-kitchen-chip="1"><span>01</span>攪拌</li>
-            <li class="kitchen-chip" data-kitchen-chip="2"><span>02</span>烘焙</li>
-            <li class="kitchen-chip" data-kitchen-chip="3"><span>03</span>裝飾</li>
-          </ol>
-
-          <div class="kitchen-step-panel" data-kitchen-step="1">
-            <p class="kitchen-step-kicker">STEP 01 / MIX</p>
-            <h3>把麵糊拌勻</h3>
-            <p>點擊場景中的鋼盆，或按下方按鈕。還需要 <strong id="mix-remaining">5</strong> 下。</p>
-            <div class="kitchen-progress" aria-hidden="true"><span id="mix-progress-bar"></span></div>
-            <button class="btn btn--submit kitchen-action-btn" id="mix-btn" type="button">
-              <span>攪拌一下</span>
-              <svg class="icon"><use href="#i-restart"></use></svg>
-            </button>
-          </div>
-
-          <div class="kitchen-step-panel" data-kitchen-step="2" hidden>
-            <p class="kitchen-step-kicker">STEP 02 / BAKE</p>
-            <h3>送進烤箱</h3>
-            <p>烤箱已經預熱。點擊烤箱，等蛋糕慢慢膨起。</p>
-            <div class="kitchen-progress" aria-hidden="true"><span id="bake-progress-bar"></span></div>
-            <button class="btn btn--submit kitchen-action-btn" id="bake-btn" type="button">
-              <span>送進烤箱</span>
-              <svg class="icon"><use href="#i-sparkle"></use></svg>
-            </button>
-            <p class="kitchen-bake-note" id="bake-note">烤箱溫度 180°C</p>
-          </div>
-
-          <div class="kitchen-step-panel" data-kitchen-step="3" hidden>
-            <p class="kitchen-step-kicker">STEP 03 / DECORATE</p>
-            <h3>裝飾生日蛋糕</h3>
-            <p>照著食譜，把草莓與蠟燭放上蛋糕。點擊場景，或使用下方按鈕。</p>
-            <div class="kitchen-recipe">
-              <div class="kitchen-recipe-head"><span>今日食譜</span><span id="kitchen-recipe-date">—</span></div>
-              <div class="kitchen-recipe-row"><span>草莓</span><strong><span id="berry-count">0</span> / <span id="berry-target">4</span></strong></div>
-              <div class="kitchen-recipe-row"><span>蠟燭</span><strong><span id="candle-count">0</span> / <span id="candle-target">3</span></strong></div>
-            </div>
-            <div class="kitchen-decorate-actions">
-              <button class="btn kitchen-mini-btn" id="berry-btn" type="button"><span>＋ 草莓</span></button>
-              <button class="btn kitchen-mini-btn" id="candle-btn" type="button"><span>＋ 蠟燭</span></button>
-            </div>
-            <button class="btn btn--birthday kitchen-action-btn" id="finish-cake-btn" type="button" disabled>
-              <span>完成蛋糕</span>
-              <svg class="icon"><use href="#i-cake"></use></svg>
-            </button>
-          </div>
-
-          <p class="kitchen-status" id="kitchen-status" aria-live="polite"></p>
-          <p class="kitchen-footnote">完成蛋糕，第三道門就會打開。</p>
-          <div class="kitchen-hud-mark" aria-hidden="true">
-            <svg class="icon"><use href="#i-cake"></use></svg>
-            <span>BAKED IN REAL-TIME 3D</span>
-          </div>
-        </aside>
+  <footer class="site-footer">
+    <div class="footer-top">
+      <a class="site-brand" href="#top" aria-label="三關謎城 · The Three Gates">
+        <span class="site-seal" aria-hidden="true">謎</span>
+        <span class="site-brand-text"><strong>三關謎城</strong><small>THE THREE GATES</small></span>
+      </a>
+      <p data-en="An original browser puzzle in three acts. Made for one more curious night.">一場原創的三幕網頁解謎，為下一個好奇的夜晚而作。</p>
+      <div class="lang-switch lang-switch--footer" role="group" aria-label="Language / 語言">
+        <button type="button" data-lang="zh" aria-pressed="true">中</button>
+        <button type="button" data-lang="en" aria-pressed="false">EN</button>
       </div>
     </div>
-  </section>
-
-  <div class="passage" id="passage" aria-hidden="true">
-    <div class="passage-door passage-door--left"></div>
-    <div class="passage-door passage-door--right"></div>
-    <div class="passage-content">
-      <span class="passage-kicker" id="passage-kicker">GATE I · OPEN</span>
-      <span class="passage-numeral" id="passage-numeral">I</span>
-      <strong id="passage-title">第一道門，開了</strong>
-      <span class="passage-next" id="passage-next">下一關 · 密室逃脫</span>
+    <div class="footer-grid">
+      <div>
+        <h3 data-en="Explore">探索</h3>
+        <a href="#experience" data-en="The experience">體驗</a>
+        <a href="#chapters" data-en="Chapters">關卡</a>
+        <a href="#kitchen" data-en="3D Kitchen">3D 廚房</a>
+        <a href="#creator" data-en="Creator">創作者</a>
+      </div>
+      <div>
+        <h3 data-en="Project">專案</h3>
+        <a href="play.html?lang=zh-Hant" data-play-link data-en="Play the game">遊玩</a>
+        <a href="#faq" data-en="FAQ">常見問題</a>
+        <a href="https://github.com/s20250051-cpu/ting123" target="_blank" rel="noopener" data-en="GitHub">GitHub</a>
+        <a href="#play" data-en="Open the gate">推開第一道門</a>
+      </div>
+      <div>
+        <h3 data-en="Credits">製作</h3>
+        <p class="footer-credit"><span data-en="Creator">創作者</span><strong>2B 劉清婷</strong></p>
+        <p class="footer-credit"><span data-en="Built with">技術</span><strong>Three.js · SVG · Vanilla JS</strong></p>
+        <p class="footer-credit"><span data-en="Class">班別</span><strong>2B</strong></p>
+      </div>
     </div>
-  </div>
+    <div class="footer-bottom">
+      <span data-en="© 2026 The Three Gates. All original work by 2B 劉清婷.">© 2026 三關謎城 · 原創作品，作者 2B 劉清婷。</span>
+      <span data-en="No accounts. No ads. No third-party tracking.">不需帳號 · 沒有廣告 · 沒有第三方追蹤</span>
+    </div>
+  </footer>
 
-  <div class="toast" id="toast" role="status" aria-live="polite"></div>
-
-  <script src="vendor/three.min.js"></script>
-  <script src="kitchen.js"></script>
-  <script src="app.js"></script>
+  <script src="site.js"></script>
 </body>
 </html>
